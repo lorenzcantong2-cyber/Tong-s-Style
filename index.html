@@ -28,7 +28,11 @@
         ============================================================ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        html { font-size: 16px; scroll-behavior: smooth; }
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            scroll-padding-top: 72px; /* offset for fixed nav */
+        }
 
         body {
             font-family: var(--font-body);
@@ -974,61 +978,79 @@
             flex-direction: column;
             justify-content: center;
             gap: 5px;
-            padding: 6px;
+            padding: 8px;
             cursor: pointer;
             background: none;
             border: none;
-            z-index: 101;
+            z-index: 151;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
         }
         .nav-hamburger span {
             width: 22px;
-            height: 1.5px;
+            height: 2px;
             background: var(--white);
             display: block;
             border-radius: 1px;
-            transition: transform 0.25s ease, opacity 0.2s ease;
+            transition: transform 0.28s ease, opacity 0.2s ease, background 0.2s ease;
         }
-        .nav.scrolled .nav-hamburger span { background: var(--black); }
-        .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+        /* Lines turn dark when page is scrolled OR when overlay is open */
+        .nav.scrolled .nav-hamburger span,
+        .nav.menu-open .nav-hamburger span { background: var(--black); }
 
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Logo turns dark when overlay open */
+        .nav.menu-open .nav-logo { color: var(--black); }
+
+        /* Overlay — always in DOM, toggled with visibility+opacity so transition works */
         .nav-mobile-overlay {
-            display: none;
             position: fixed;
             inset: 0;
             background: var(--white);
-            z-index: 99;
+            z-index: 150;
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             opacity: 0;
-            transition: opacity 0.25s ease;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
         }
         .nav-mobile-overlay.open {
-            display: flex;
             opacity: 1;
+            visibility: visible;
+            pointer-events: all;
         }
         .nav-mobile-overlay a {
             font-family: var(--font-display);
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: var(--black);
             letter-spacing: -0.02em;
-            padding: 10px 0;
+            padding: 12px 24px;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
             transition: color 0.15s;
         }
-        .nav-mobile-overlay a:hover { color: var(--muted); }
+        .nav-mobile-overlay a:active { color: var(--muted); }
         .nav-mobile-overlay .nav-cta {
-            margin-top: 16px;
+            margin-top: 20px;
             background: var(--saffron);
             color: var(--black) !important;
-            padding: 14px 36px;
+            padding: 16px 40px;
             border-radius: 2px;
             font-size: 1rem;
             font-family: var(--font-body);
             font-weight: 500;
+            letter-spacing: 0;
+            min-height: 52px;
         }
 
         /* ============================================================
@@ -1038,59 +1060,98 @@
             .menu-grid { grid-template-columns: repeat(2, 1fr); }
             .testimonials-grid { grid-template-columns: 1fr; }
             .quiz-band { flex-direction: column; align-items: flex-start; }
+            html { scroll-padding-top: 60px; }
         }
 
         @media (max-width: 680px) {
-            /* Nav */
-            .nav { padding: 16px 20px; }
-            .nav.scrolled { padding: 12px 20px; }
-            .nav-links { display: none; }
+            html { scroll-padding-top: 56px; }
+
+            /* ── Nav ── */
+            .nav { padding: 14px 20px; }
+            .nav.scrolled { padding: 11px 20px; }
+            .nav-links { display: none !important; }
             .nav-hamburger { display: flex; }
 
-            /* Hero */
-            .hero { padding: 0 20px 72px; min-height: 100svh; }
+            /* ── Hero ── */
+            .hero {
+                padding: 0 20px 80px;
+                min-height: 100vh;        /* fallback */
+                min-height: 100dvh;       /* dynamic viewport — accounts for browser chrome */
+                align-items: flex-end;
+            }
             .hero-scroll-hint { display: none; }
-            .hero-tagline { font-size: 1rem; }
-            .btn-primary, .btn-ghost { width: 100%; justify-content: center; padding: 16px; }
-            .hero-actions { flex-direction: column; }
+            .hero-title { margin-bottom: 20px; }
+            .hero-tagline { font-size: 1rem; margin-bottom: 32px; }
+            .hero-actions { flex-direction: column; gap: 10px; }
+            .btn-primary, .btn-ghost {
+                width: 100%;
+                justify-content: center;
+                padding: 16px;
+                font-size: 0.95rem;
+                min-height: 52px;
+            }
 
-            /* Quiz band */
-            .quiz-band { padding: 56px 20px; gap: 28px; }
+            /* ── Quiz band ── */
+            .quiz-band { padding: 56px 20px; gap: 24px; }
+            .btn-quiz-start { width: 100%; text-align: center; padding: 16px 24px; }
 
-            /* Quiz overlay */
+            /* ── Quiz overlay ── */
             .quiz-topbar { padding: 14px 20px; }
-            .quiz-body { padding: 28px 0; overflow-y: auto; }
-            .quiz-step { padding: 0 20px; }
-            .quiz-options { grid-template-columns: 1fr; }
+            .quiz-body {
+                padding: 24px 0;
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                align-items: flex-start;
+            }
+            .quiz-step { padding: 0 20px; position: relative; }
+            .quiz-question { font-size: 1.5rem; margin-bottom: 24px; }
+            .quiz-options { grid-template-columns: 1fr; gap: 8px; }
+            .quiz-option { padding: 14px 16px; min-height: 52px; }
             .quiz-option:last-child:nth-child(odd) { grid-column: span 1; }
+            .result-actions { flex-direction: column; }
+            .btn-order-cta, .btn-restart { width: 100%; text-align: center; justify-content: center; }
 
-            /* Menu */
-            .menu { padding: 64px 16px; }
+            /* ── Menu ── */
+            .menu { padding: 60px 16px; }
+            .section-header { margin-bottom: 36px; }
             .menu-grid { grid-template-columns: 1fr; }
+            .btn-add-cart { min-height: 48px; font-size: 0.9rem; }
+            .qty-btn { width: 52px; height: 48px; font-size: 1.4rem; }
 
-            /* Testimonials */
-            .testimonials { padding: 64px 20px; }
+            /* ── Testimonials ── */
+            .testimonials { padding: 60px 20px; }
 
-            /* Order form — bump font to 16px so iOS doesn't auto-zoom */
-            .order-section { padding: 64px 20px; }
-            .form-row { grid-template-columns: 1fr; gap: 36px; }
-            .form-input, .form-textarea { font-size: 1rem; }
-            .form-submit { width: 100%; text-align: center; }
+            /* ── Order form ── */
+            .order-section { padding: 60px 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 32px; }
+            /* 16px minimum prevents iOS auto-zoom on input focus */
+            .form-input, .form-textarea { font-size: 1rem; padding: 12px 0; }
+            .form-textarea { min-height: 110px; }
+            .form-submit {
+                width: 100%;
+                text-align: center;
+                align-self: stretch;
+                padding: 18px;
+                font-size: 1rem;
+            }
 
-            /* Footer */
+            /* ── Footer ── */
             .footer { padding: 48px 20px 36px; }
             .footer-inner { flex-direction: column; gap: 28px; }
             .footer-links { gap: 20px; flex-wrap: wrap; }
 
-            /* Cart bar — stay above iPhone home indicator */
+            /* ── Cart bar — stay above iPhone home bar ── */
             .cart-bar {
                 width: calc(100% - 32px);
-                bottom: calc(-90px - env(safe-area-inset-bottom));
-                padding-bottom: calc(14px + env(safe-area-inset-bottom));
+                border-radius: 10px;
+                bottom: calc(-100px - env(safe-area-inset-bottom, 0px));
+                padding: 14px 16px;
+                padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
             }
             .cart-bar.active {
-                bottom: calc(16px + env(safe-area-inset-bottom));
+                bottom: calc(16px + env(safe-area-inset-bottom, 0px));
             }
+            .cart-bar-send { padding: 12px 18px; min-height: 44px; }
         }
     </style>
 </head>
@@ -1510,17 +1571,20 @@
            MOBILE NAV
         ============================================================ */
         function toggleMobileMenu() {
-            const btn = document.getElementById('navHamburger');
+            const btn     = document.getElementById('navHamburger');
             const overlay = document.getElementById('mobileNav');
-            const isOpen = overlay.classList.toggle('open');
+            const nav     = document.getElementById('mainNav');
+            const isOpen  = overlay.classList.toggle('open');
             btn.classList.toggle('open', isOpen);
-            btn.setAttribute('aria-expanded', isOpen);
+            nav.classList.toggle('menu-open', isOpen);
+            btn.setAttribute('aria-expanded', String(isOpen));
             document.body.style.overflow = isOpen ? 'hidden' : '';
         }
 
         function closeMobileMenu() {
             document.getElementById('navHamburger').classList.remove('open');
             document.getElementById('mobileNav').classList.remove('open');
+            document.getElementById('mainNav').classList.remove('menu-open');
             document.getElementById('navHamburger').setAttribute('aria-expanded', 'false');
             document.body.style.overflow = '';
         }
