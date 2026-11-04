@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TONG'S STYLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           TOKENS
+        ============================================================ */
+        :root {
+            --white:        #FAFAF9;
+            --black:        #161614;
+            --saffron:      #EEC724;
+            --saffron-pale: #FDF8DC;
+            --surface:      #F2F0EB;
+            --muted:        #78756F;
+            --border:       #DDD9CF;
+            --font-display: 'Syne', sans-serif;
+            --font-body:    'DM Sans', sans-serif;
+        }
+
+        /* ============================================================
+           RESET
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 16px; scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+
+        :focus-visible {
+            outline: 2px solid var(--saffron);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 22px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav.scrolled {
+            background: var(--white);
+            padding: 14px 48px;
+            box-shadow: 0 1px 0 var(--border);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+            color: var(--white);
+            transition: color 0.3s;
+        }
+
+        .nav.scrolled .nav-logo { color: var(--black); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.75);
+            transition: color 0.2s;
+        }
+
+        .nav.scrolled .nav-links li a { color: var(--muted); }
+        .nav-links li a:hover { color: var(--white); }
+        .nav.scrolled .nav-links li a:hover { color: var(--black); }
+
+        .nav-cta {
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            color: var(--black) !important;
+            background: var(--saffron);
+            padding: 9px 20px;
+            border-radius: 2px;
+            transition: opacity 0.2s !important;
+        }
+
+        .nav-cta:hover { opacity: 0.82; }
+
+        /* ============================================================
+           HERO
+        ============================================================ */
+        .hero {
+            position: relative;
+            height: 100vh;
+            min-height: 580px;
+            display: flex;
+            align-items: flex-end;
+            padding: 0 48px 80px;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            transform: scale(1.06);
+            transition: transform 7s ease-out;
+        }
+
+        .hero-bg.loaded { transform: scale(1); }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(10,10,8,0.80) 0%,
+                rgba(10,10,8,0.35) 55%,
+                rgba(10,10,8,0.10) 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 980px;
+            animation: heroIn 0.9s cubic-bezier(0.2, 0, 0.3, 1) 0.1s both;
+        }
+
+        @keyframes heroIn {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(4rem, 13vw, 11.5rem);
+            line-height: 0.86;
+            color: var(--white);
+            letter-spacing: -0.03em;
+            margin-bottom: 28px;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.55;
+            margin-bottom: 40px;
+            max-width: 400px;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 14px 28px;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        .btn-ghost {
+            display: inline-flex;
+            align-items: center;
+            background: transparent;
+            color: rgba(255,255,255,0.85);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 300;
+            padding: 14px 28px;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.65);
+        }
+
+        .hero-scroll-hint {
+            position: absolute;
+            bottom: 36px;
+            right: 48px;
+            writing-mode: vertical-rl;
+            font-size: 0.7rem;
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            color: rgba(255,255,255,0.35);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-scroll-line {
+            width: 1px;
+            height: 36px;
+            background: rgba(255,255,255,0.25);
+            animation: scrollPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.25; }
+            50%       { opacity: 0.65; }
+        }
+
+        /* ============================================================
+           QUIZ TRIGGER BAND
+        ============================================================ */
+        .quiz-band {
+            background: var(--black);
+            padding: 72px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 48px;
+        }
+
+        .quiz-band-text h2 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+            color: var(--white);
+            line-height: 1.1;
+            max-width: 420px;
+        }
+
+        .quiz-band-text h2 em {
+            font-style: normal;
+            color: var(--saffron);
+        }
+
+        .quiz-band-text p {
+            color: rgba(255,255,255,0.4);
+            margin-top: 12px;
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .btn-quiz-start {
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 18px 36px;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .btn-quiz-start:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* ============================================================
+           QUIZ OVERLAY
+        ============================================================ */
+        .quiz-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: var(--white);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.28s ease;
+        }
+
+        .quiz-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .quiz-topbar {
+            padding: 18px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .quiz-topbar-brand {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.95rem;
+            letter-spacing: -0.02em;
+        }
+
+        .quiz-progress {
+            flex: 1;
+            max-width: 220px;
+            height: 2px;
+            background: var(--border);
+            margin: 0 32px;
+            border-radius: 1px;
+            overflow: hidden;
+        }
+
+        .quiz-progress-fill {
+            height: 100%;
+            background: var(--saffron);
+            border-radius: 1px;
+            transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .quiz-close-btn {
+            font-size: 1.4rem;
+            line-height: 1;
+            color: var(--muted);
+            padding: 6px;
+            cursor: pointer;
+            transition: color 0.15s;
+            border: none;
+            background: none;
+            font-family: var(--font-body);
+        }
+
+        .quiz-close-btn:hover { color: var(--black); }
+
+        .quiz-body {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-step {
+            position: absolute;
+            width: 100%;
+            max-width: 620px;
+            padding: 0 48px;
+            transform: translateX(56px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.32s ease;
+        }
+
+        .quiz-step.active {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .quiz-step.exit-left {
+            transform: translateX(-56px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .quiz-step-num {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+            margin-bottom: 18px;
+        }
+
+        .quiz-question {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: clamp(1.5rem, 3.2vw, 2.3rem);
+            line-height: 1.1;
+            margin-bottom: 36px;
+            color: var(--black);
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 18px;
+            border: 1.5px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-weight: 400;
+            color: var(--black);
+            cursor: pointer;
+            text-align: left;
+            background: var(--white);
+            transition: border-color 0.14s, background 0.14s;
+            font-family: var(--font-body);
+        }
+
+        .quiz-option:hover {
+            border-color: var(--black);
+            background: var(--surface);
+        }
+
+        .quiz-option.selected {
+            border-color: var(--saffron);
+            background: var(--saffron-pale);
+        }
+
+        .quiz-option-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border: 1.5px solid var(--border);
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            flex-shrink: 0;
+            transition: border-color 0.14s, background 0.14s;
+        }
+
+        .quiz-option:hover .quiz-option-key,
+        .quiz-option.selected .quiz-option-key {
+            background: var(--saffron);
+            border-color: var(--saffron);
+        }
+
+        /* 5th option spans full width */
+        .quiz-option:last-child:nth-child(odd) {
+            grid-column: span 2;
+        }
+
+        /* ---- RESULT ---- */
+        .quiz-result {
+            text-align: center;
+        }
+
+        .result-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+            margin-bottom: 14px;
+            letter-spacing: 0.04em;
+        }
+
+        .result-name {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(1.9rem, 4.5vw, 3.2rem);
+            line-height: 1.0;
+            margin-bottom: 18px;
+        }
+
+        .result-desc {
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.65;
+            max-width: 400px;
+            margin: 0 auto 16px;
+        }
+
+        .result-price {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 2rem;
+            color: var(--saffron);
+            margin-bottom: 36px;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-order-cta {
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 14px 28px;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-order-cta:hover { opacity: 0.72; }
+
+        .btn-restart {
+            background: transparent;
+            color: var(--muted);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 400;
+            padding: 14px 20px;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            cursor: pointer;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .btn-restart:hover { color: var(--black); border-color: var(--black); }
+
+        /* ============================================================
+           MENU
+        ============================================================ */
+        .menu {
+            padding: 100px 48px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 56px;
+        }
+
+        .section-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 0.95;
+            letter-spacing: -0.025em;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .menu-item {
+            background: var(--white);
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover { background: var(--surface); }
+
+        /* ---- Cart controls inside each menu card ---- */
+        .menu-cart-ctrl { margin-top: 16px; }
+
+        .btn-add-cart {
+            display: block;
+            width: 100%;
+            padding: 11px 20px;
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s;
+            border-radius: 2px;
+        }
+        .btn-add-cart:hover { opacity: 0.82; }
+
+        .qty-controls {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--saffron);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .menu-cart-ctrl.has-item .btn-add-cart { display: none; }
+        .menu-cart-ctrl.has-item .qty-controls  { display: flex; }
+
+        .qty-btn {
+            width: 42px;
+            height: 40px;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            font-weight: 300;
+            cursor: pointer;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+        .qty-btn:hover { background: rgba(0,0,0,0.1); }
+
+        .qty-num {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--black);
+            min-width: 24px;
+            text-align: center;
+        }
+
+        /* ---- Floating cart bar ---- */
+        .cart-bar {
+            position: fixed;
+            bottom: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 16px 14px 22px;
+            border-radius: 4px;
+            min-width: 300px;
+            max-width: 480px;
+            width: calc(100% - 48px);
+            z-index: 300;
+            transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+        }
+        .cart-bar.active { bottom: 24px; }
+
+        .cart-bar-info { display: flex; flex-direction: column; gap: 1px; }
+
+        .cart-bar-count {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+        }
+        .cart-bar-total {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .cart-bar-send {
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .cart-bar-send:hover { opacity: 0.85; }
+
+        .menu-img-wrap { overflow: hidden; }
+
+        .menu-img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.85);
+            transition: filter 0.35s, transform 0.45s cubic-bezier(0.2, 0, 0.3, 1);
+        }
+
+        .menu-item:hover .menu-img {
+            filter: saturate(1);
+            transform: scale(1.04);
+        }
+
+        .menu-item-body {
+            padding: 20px 20px 22px;
+        }
+
+        .menu-item-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+
+        .menu-item-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .menu-item-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-item-price {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .menu-item-badge {
+            font-size: 0.72rem;
+            font-weight: 400;
+            padding: 3px 8px;
+            background: var(--saffron-pale);
+            border-radius: 2px;
+        }
+
+        /* ============================================================
+           TESTIMONIALS
+        ============================================================ */
+        .testimonials {
+            background: var(--surface);
+            padding: 100px 48px;
+        }
+
+        .testimonials-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            padding: 36px 32px;
+        }
+
+        .testimonial-mark {
+            font-size: 2.8rem;
+            line-height: 1;
+            color: var(--saffron);
+            font-family: Georgia, 'Times New Roman', serif;
+            margin-bottom: 18px;
+            display: block;
+        }
+
+        .testimonial-text {
+            font-size: 0.925rem;
+            line-height: 1.7;
+            color: var(--black);
+            font-weight: 300;
+            margin-bottom: 28px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .testimonial-name {
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        .testimonial-detail {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           ORDER FORM
+        ============================================================ */
+        .order-section {
+            padding: 100px 48px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .order-form {
+            display: grid;
+            gap: 44px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .form-input,
+        .form-textarea {
+            font-family: var(--font-body);
+            font-size: 0.975rem;
+            font-weight: 300;
+            color: var(--black);
+            background: none;
+            border: none;
+            border-bottom: 1.5px solid var(--border);
+            padding: 10px 0;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--black);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--border);
+        }
+
+        .form-textarea {
+            resize: none;
+            min-height: 96px;
+            line-height: 1.6;
+        }
+
+        .form-submit {
+            align-self: flex-start;
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 17px 36px;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .form-submit:hover { opacity: 0.72; transform: translateY(-1px); }
+        .form-submit:disabled { opacity: 0.5; transform: none; cursor: default; }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer {
+            background: var(--black);
+            padding: 64px 48px 44px;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 48px;
+        }
+
+        .footer-brand-name {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: -0.025em;
+        }
+
+        .footer-brand-tag {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.35);
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            gap: 36px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.875rem;
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 36px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.22);
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 960px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .quiz-band { flex-direction: column; align-items: flex-start; }
+        }
+
+        @media (max-width: 680px) {
+            .nav { padding: 16px 24px; }
+            .nav.scrolled { padding: 12px 24px; }
+            .nav-links { display: none; }
+
+            .hero { padding: 0 24px 60px; }
+
+            .quiz-band { padding: 60px 24px; }
+
+            .quiz-topbar { padding: 16px 24px; }
+            .quiz-body { padding: 32px 24px; }
+            .quiz-step { padding: 0 24px; }
+            .quiz-options { grid-template-columns: 1fr; }
+            .quiz-option:last-child:nth-child(odd) { grid-column: span 1; }
+
+            .menu { padding: 72px 24px; }
+            .menu-grid { grid-template-columns: 1fr; }
+
+            .testimonials { padding: 72px 24px; }
+
+            .order-section { padding: 72px 24px; }
+            .form-row { grid-template-columns: 1fr; gap: 44px; }
+
+            .footer { padding: 48px 24px 36px; }
+            .footer-inner { flex-direction: column; gap: 28px; }
+            .footer-links { gap: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="nav" id="mainNav" aria-label="Main navigation">
+        <a href="#" class="nav-logo">TONG'S STYLE</a>
+        <ul class="nav-links">
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="#menu" class="nav-cta">Order now</a></li>
+        </ul>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero" aria-label="Hero">
+        <div class="hero-bg" id="heroBg" role="img" aria-label="Restaurant background"></div>
+        <div class="hero-overlay" aria-hidden="true"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">TONG'S<br>STYLE</h1>
+            <p class="hero-tagline">No gatekeeping.<br>Prepped Fresh and ready to roll.</p>
+            <div class="hero-actions">
+                <button class="btn-primary" onclick="openQuiz()">Find your order</button>
+                <a href="#menu" class="btn-ghost">See the menu</a>
+            </div>
+        </div>
+        <div class="hero-scroll-hint" aria-hidden="true">
+            <div class="hero-scroll-line"></div>
+            scroll
+        </div>
+    </section>
+
+    <!-- QUIZ TRIGGER BAND -->
+    <section class="quiz-band" aria-label="Order quiz">
+        <div class="quiz-band-text">
+            <h2>Not sure what to get?<br>Let us <em>pick for you.</em></h2>
+            <p>Three questions. One personalized order.</p>
+        </div>
+        <button class="btn-quiz-start" onclick="openQuiz()">Start the quiz</button>
+    </section>
+
+    <!-- QUIZ OVERLAY -->
+    <div class="quiz-overlay" id="quizOverlay" role="dialog" aria-modal="true" aria-label="Order finder quiz">
+        <div class="quiz-topbar">
+            <span class="quiz-topbar-brand">TONG'S STYLE</span>
+            <div class="quiz-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                <div class="quiz-progress-fill" id="progressFill"></div>
+            </div>
+            <button class="quiz-close-btn" onclick="closeQuiz()" aria-label="Close quiz">&#x2715;</button>
+        </div>
+
+        <div class="quiz-body">
+
+            <!-- Step 1: What food -->
+            <div class="quiz-step active" id="step-0">
+                <div class="quiz-step-num">Question 1 of 3</div>
+                <h2 class="quiz-question">What do you need today?</h2>
+                <div class="quiz-options">
+                    <button class="quiz-option" onclick="selectOption(0, 'Sisig', this)">
+                        <span class="quiz-option-key">A</span> Sisig
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(0, 'Burger', this)">
+                        <span class="quiz-option-key">B</span> Burger
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(0, 'Wapr', this)">
+                        <span class="quiz-option-key">C</span> Wapr
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(0, 'Just Because', this)">
+                        <span class="quiz-option-key">D</span> Just Because
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Size -->
+            <div class="quiz-step" id="step-1">
+                <div class="quiz-step-num">Question 2 of 3</div>
+                <h2 class="quiz-question">How many people are eating?</h2>
+                <div class="quiz-options">
+                    <button class="quiz-option" onclick="selectOption(1, 'Solo', this)">
+                        <span class="quiz-option-key">A</span> Solo — just me
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(1, 'Duo', this)">
+                        <span class="quiz-option-key">B</span> Duo — me and one more
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(1, 'Barkada', this)">
+                        <span class="quiz-option-key">C</span> Barkada — the whole squad
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(1, 'Family', this)">
+                        <span class="quiz-option-key">D</span> Family — everyone's coming
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(1, 'Surprise Me', this)">
+                        <span class="quiz-option-key">E</span> Surprise Me — I don't care, just feed me
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Budget -->
+            <div class="quiz-step" id="step-2">
+                <div class="quiz-step-num">Question 3 of 3</div>
+                <h2 class="quiz-question">What's your budget for this order?</h2>
+                <div class="quiz-options">
+                    <button class="quiz-option" onclick="selectOption(2, 'Under 50', this)">
+                        <span class="quiz-option-key">A</span> Under &#x20B1;50 — keep it tight
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(2, '50-100', this)">
+                        <span class="quiz-option-key">B</span> &#x20B1;50–100 — the sweet spot
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(2, '100-200', this)">
+                        <span class="quiz-option-key">C</span> &#x20B1;100–200 — go for it
+                    </button>
+                    <button class="quiz-option" onclick="selectOption(2, '200+', this)">
+                        <span class="quiz-option-key">D</span> &#x20B1;200+ — treat everyone
+                    </button>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div class="quiz-step quiz-result" id="step-result">
+                <div class="result-label">Your pick</div>
+                <h2 class="result-name" id="recName">Classic Sisig Combo</h2>
+                <p class="result-desc" id="recDesc">Loading recommendation...</p>
+                <div class="result-price" id="recPrice">&#x20B1;180</div>
+                <div class="result-actions">
+                    <a href="#order" class="btn-order-cta" id="orderThisBtn">Order this now</a>
+                    <button class="btn-restart" onclick="restartQuiz()">Try again</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MENU -->
+    <section class="menu" id="menu" aria-label="Menu">
+        <div class="section-header">
+            <p class="section-label">What we make</p>
+            <h2 class="section-title">The menu.</h2>
+        </div>
+        <div class="menu-grid">
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Classic Sisig Combo" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Classic Sisig Combo</h3>
+                    <p class="menu-item-desc">Sizzling pork sisig, egg on top, garlic rice, chicharon crumble, and your drink of choice.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;180</span>
+                        <span class="menu-item-badge">Bestseller</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-sisig-combo">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Classic Sisig Combo', 180, 'ctrl-sisig-combo')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, -1, 'ctrl-sisig-combo')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, 1, 'ctrl-sisig-combo')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="TONG's Burger Combo" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">TONG's Burger Combo</h3>
+                    <p class="menu-item-desc">Double smash patty, special sauce, coleslaw, house pickles. Fries and a drink included.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;225</span>
+                        <span class="menu-item-badge">Staff pick</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-burger-combo">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('TONG\'s Burger Combo', 225, 'ctrl-burger-combo')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, -1, 'ctrl-burger-combo')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, 1, 'ctrl-burger-combo')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="The OG Wapr" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">The OG Wapr</h3>
+                    <p class="menu-item-desc">Waffle wrap stuffed with sisig or burger, cheese sauce, pickled veg, and house aioli.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;130</span>
+                        <span class="menu-item-badge">New</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-og-wapr">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('The OG Wapr', 130, 'ctrl-og-wapr')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, -1, 'ctrl-og-wapr')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, 1, 'ctrl-og-wapr')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Sisig Rice Bowl" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Sisig Rice Bowl</h3>
+                    <p class="menu-item-desc">Sisig over garlic fried rice, sunny-side egg, crispy chicharon, drizzle of spiced vinegar.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;90</span>
+                        <span class="menu-item-badge">Solo</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-rice-bowl">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Sisig Rice Bowl', 90, 'ctrl-rice-bowl')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, -1, 'ctrl-rice-bowl')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, 1, 'ctrl-rice-bowl')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Barkada Platter" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Barkada Platter</h3>
+                    <p class="menu-item-desc">Full sisig platter, 4 mini burgers, 4 waprs, 4 drinks. Everyone eats. No one complains.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;680</span>
+                        <span class="menu-item-badge">Feeds 4–5</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-barkada">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Barkada Platter', 680, 'ctrl-barkada')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, -1, 'ctrl-barkada')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, 1, 'ctrl-barkada')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Sweet Wapr" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Sweet Wapr</h3>
+                    <p class="menu-item-desc">Dessert waffle wrap with Nutella, fresh banana, crushed graham, and a dusting of sugar.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;85</span>
+                        <span class="menu-item-badge">Dessert</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-sweet-wapr">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Sweet Wapr', 85, 'ctrl-sweet-wapr')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, -1, 'ctrl-sweet-wapr')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, 1, 'ctrl-sweet-wapr')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonials" aria-label="Customer reviews">
+        <div class="testimonials-inner">
+            <div class="section-header">
+                <p class="section-label">What people say</p>
+                <h2 class="section-title">The word<br>on the street.</h2>
+            </div>
+            <div class="testimonials-grid">
+
+                <div class="testimonial-card">
+                    <span class="testimonial-mark" aria-hidden="true">"</span>
+                    <p class="testimonial-text">Genuinely the best sisig I've had outside of a boodle fight. The rice absorbs everything and the chicharon on top — that detail makes it.</p>
+                    <div class="testimonial-author">
+                        <img class="testimonial-avatar"
+                             src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=80&h=80&q=80"
+                             alt="Rico M." loading="lazy">
+                        <div>
+                            <div class="testimonial-name">Rico M.</div>
+                            <div class="testimonial-detail">Regular customer, Lipa City</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <span class="testimonial-mark" aria-hidden="true">"</span>
+                    <p class="testimonial-text">Ordered the Barkada Platter for our Sunday tambay and everyone kept asking where it was from. Already planning the next one. The waprs were gone in five minutes.</p>
+                    <div class="testimonial-author">
+                        <img class="testimonial-avatar"
+                             src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=80&h=80&q=80"
+                             alt="Sab L." loading="lazy">
+                        <div>
+                            <div class="testimonial-name">Sab L.</div>
+                            <div class="testimonial-detail">Group order, Batangas City</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <span class="testimonial-mark" aria-hidden="true">"</span>
+                    <p class="testimonial-text">The Wapr is so simple it shouldn't work this well. But it does. I've ordered it three times this month and I'm not stopping anytime soon.</p>
+                    <div class="testimonial-author">
+                        <img class="testimonial-avatar"
+                             src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=80&h=80&q=80"
+                             alt="Jolo D." loading="lazy">
+                        <div>
+                            <div class="testimonial-name">Jolo D.</div>
+                            <div class="testimonial-detail">Wapr convert, Sto. Tomas</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ORDER FORM -->
+    <section class="order-section" id="order" aria-label="Place an order">
+        <div class="section-header">
+            <p class="section-label">Place your order</p>
+            <h2 class="section-title">Let's get<br>this started.</h2>
+        </div>
+        <form class="order-form" id="orderForm" onsubmit="handleFormSubmit(event)" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="f-name">Name</label>
+                    <input class="form-input" type="text" id="f-name" name="name" placeholder="Your full name" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-email">Email</label>
+                    <input class="form-input" type="email" id="f-email" name="email" placeholder="your@email.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="f-phone">Phone</label>
+                    <input class="form-input" type="tel" id="f-phone" name="phone" placeholder="+63 9XX XXX XXXX" required autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-date">Date needed</label>
+                    <input class="form-input" type="date" id="f-date" name="date" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="f-message">What you want</label>
+                <textarea class="form-textarea" id="f-message" name="message" placeholder="Tell us your order, quantity, and any special requests..." rows="4"></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Send order</button>
+        </form>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand-name">TONG'S STYLE</div>
+                <div class="footer-brand-tag">No gatekeeping. Prepped Fresh and ready to roll.</div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#order">Order</a></li>
+                <li><a href="mailto:hello@tongsstyle.ph">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 TONG'S STYLE. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- FLOATING CART BAR -->
+    <div class="cart-bar" id="cartBar" role="status" aria-live="polite">
+        <div class="cart-bar-info">
+            <span class="cart-bar-count" id="cartCount">0 items</span>
+            <span class="cart-bar-total" id="cartTotal">₱0</span>
+        </div>
+        <button class="cart-bar-send" onclick="sendCartOrder()">Send Order →</button>
+    </div>
+
+    <script>
+        /* ============================================================
+           NAV SCROLL BEHAVIOR
+        ============================================================ */
+        const mainNav = document.getElementById('mainNav');
+        window.addEventListener('scroll', () => {
+            mainNav.classList.toggle('scrolled', window.scrollY > 56);
+        }, { passive: true });
+
+        // Hero parallax / bg load
+        const heroBg = document.getElementById('heroBg');
+        requestAnimationFrame(() => heroBg.classList.add('loaded'));
+
+        /* ============================================================
+           QUIZ STATE
+        ============================================================ */
+        let quizStep = 0;
+        const quizAnswers = [null, null, null];
+
+        const recs = {
+            'Sisig': {
+                'Under 50': {
+                    name: 'Sisig Rice Bowl',
+                    desc: 'Hot sisig over garlic rice, sunny-side egg, chicharon. The honest move under ₱90 — closest thing to the full combo.',
+                    price: '₱90'
+                },
+                '50-100': {
+                    name: 'Classic Sisig Combo',
+                    desc: 'Full sizzling sisig, egg on top, garlic rice, chicharon, drink. Everything you need in one order.',
+                    price: '₱180'
+                },
+                '100-200': {
+                    name: 'Classic Sisig Combo',
+                    desc: 'Full sizzling sisig, egg on top, garlic rice, chicharon, drink. Order two. You have the budget.',
+                    price: '₱180'
+                },
+                '200+': {
+                    name: 'Barkada Platter',
+                    desc: 'Sisig platter, 4 waprs, 4 mini burgers, 4 drinks. At ₱200+ you bring people, not just yourself.',
+                    price: '₱680'
+                }
+            },
+            'Burger': {
+                'Under 50': {
+                    name: 'Sisig Rice Bowl',
+                    desc: 'Budget\'s tight — the Rice Bowl holds you down. Try the Burger Combo next time.',
+                    price: '₱90'
+                },
+                '50-100': {
+                    name: 'The OG Wapr (Burger)',
+                    desc: 'Waffle wrap stuffed with burger, cheese sauce, pickled veg. ₱130 and it hits different.',
+                    price: '₱130'
+                },
+                '100-200': {
+                    name: "TONG's Burger Combo",
+                    desc: 'Double smash patty, fries, drink. The full package. Worth every peso — no shortcuts taken here.',
+                    price: '₱225'
+                },
+                '200+': {
+                    name: 'Barkada Platter',
+                    desc: 'Mini burgers, waprs, sisig, drinks — the works. Order for the table, not just yourself.',
+                    price: '₱680'
+                }
+            },
+            'Wapr': {
+                'Under 50': {
+                    name: 'Sweet Wapr',
+                    desc: 'Nutella, fresh banana, crushed graham, dusted sugar. Best ₱85 you\'ll spend today. Easy call.',
+                    price: '₱85'
+                },
+                '50-100': {
+                    name: 'The OG Wapr',
+                    desc: 'Stuffed waffle wrap with your fill of choice, cheese sauce, pickled veg, house aioli. This is exactly it.',
+                    price: '₱130'
+                },
+                '100-200': {
+                    name: 'OG Wapr + Sweet Wapr',
+                    desc: 'Get both. The savory one first, the sweet one after. That\'s the correct order of operations.',
+                    price: '₱215'
+                },
+                '200+': {
+                    name: 'Barkada Platter',
+                    desc: 'Waprs plus everything else on the menu. No one leaves hungry. That\'s the whole point.',
+                    price: '₱680'
+                }
+            },
+            'Just Because': {
+                'Under 50': {
+                    name: 'Sisig Rice Bowl',
+                    desc: 'You didn\'t know what you wanted but this is what you wanted. Trust the process.',
+                    price: '₱90'
+                },
+                '50-100': {
+                    name: 'The OG Wapr',
+                    desc: 'No decision needed. The wapr decides for you. It never misses, ever.',
+                    price: '₱130'
+                },
+                '100-200': {
+                    name: "TONG's Burger Combo",
+                    desc: 'When in doubt, you get the burger. Universal rule. You\'re welcome.',
+                    price: '₱225'
+                },
+                '200+': {
+                    name: 'Barkada Platter',
+                    desc: 'You said \'just because\' and you have ₱200+. Get the platter. Bring people. Live a little.',
+                    price: '₱680'
+                }
+            }
+        };
+
+        /* ============================================================
+           QUIZ FUNCTIONS
+        ============================================================ */
+        function openQuiz() {
+            quizAnswers[0] = quizAnswers[1] = quizAnswers[2] = null;
+            quizStep = 0;
+
+            document.querySelectorAll('.quiz-step').forEach(s => {
+                s.classList.remove('active', 'exit-left');
+                s.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+            });
+            document.getElementById('step-0').classList.add('active');
+            updateProgress(0);
+
+            const overlay = document.getElementById('quizOverlay');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // Focus close button for a11y
+            setTimeout(() => {
+                overlay.querySelector('.quiz-close-btn').focus();
+            }, 300);
+        }
+
+        function closeQuiz() {
+            document.getElementById('quizOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function restartQuiz() {
+            const resultEl = document.getElementById('step-result');
+            resultEl.classList.remove('active');
+
+            setTimeout(() => {
+                quizAnswers[0] = quizAnswers[1] = quizAnswers[2] = null;
+                quizStep = 0;
+
+                document.querySelectorAll('.quiz-step').forEach(s => {
+                    s.classList.remove('active', 'exit-left');
+                    s.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+                });
+                document.getElementById('step-0').classList.add('active');
+                updateProgress(0);
+            }, 400);
+        }
+
+        function updateProgress(step) {
+            const fill = document.getElementById('progressFill');
+            const pct = step === 'result' ? 100 : Math.round((step / 3) * 100);
+            fill.style.width = pct + '%';
+            fill.closest('[role="progressbar"]').setAttribute('aria-valuenow', pct);
+        }
+
+        function selectOption(step, value, el) {
+            quizAnswers[step] = value;
+
+            const stepEl = document.getElementById('step-' + step);
+            stepEl.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+
+            setTimeout(() => {
+                const nextIndex = step + 1;
+                const currentEl = document.getElementById('step-' + step);
+
+                if (nextIndex < 3) {
+                    const nextEl = document.getElementById('step-' + nextIndex);
+
+                    currentEl.classList.remove('active');
+                    currentEl.classList.add('exit-left');
+                    nextEl.classList.add('active');
+
+                    quizStep = nextIndex;
+                    updateProgress(nextIndex);
+                } else {
+                    buildResult();
+
+                    currentEl.classList.remove('active');
+                    currentEl.classList.add('exit-left');
+
+                    const resultEl = document.getElementById('step-result');
+                    resultEl.classList.add('active');
+                    updateProgress('result');
+                }
+            }, 310);
+        }
+
+        function buildResult() {
+            const food   = quizAnswers[0] || 'Just Because';
+            const size   = quizAnswers[1] || 'Solo';
+            const budget = quizAnswers[2] || '50-100';
+
+            const rec = (recs[food] || recs['Just Because'])[budget];
+
+            let desc = rec.desc;
+            if ((size === 'Barkada' || size === 'Family') && budget !== '200+') {
+                desc += ' Heads up: for a bigger group, the Barkada Platter covers everyone.';
+            }
+
+            document.getElementById('recName').textContent  = rec.name;
+            document.getElementById('recDesc').textContent  = desc;
+            document.getElementById('recPrice').textContent = rec.price;
+        }
+
+        // Keyboard navigation in quiz
+        document.addEventListener('keydown', (e) => {
+            const overlay = document.getElementById('quizOverlay');
+            if (!overlay.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
+                closeQuiz();
+                return;
+            }
+
+            const activeStep = overlay.querySelector('.quiz-step.active:not(.quiz-result)');
+            if (!activeStep) return;
+
+            const keyMap = { a: 0, b: 1, c: 2, d: 3, e: 4 };
+            const idx = keyMap[e.key.toLowerCase()];
+            if (idx !== undefined) {
+                const opts = activeStep.querySelectorAll('.quiz-option');
+                if (opts[idx]) opts[idx].click();
+            }
+        });
+
+        // Close overlay on "Order this now" click
+        document.getElementById('orderThisBtn').addEventListener('click', () => {
+            closeQuiz();
+        });
+
+        // Direct click handler — fires before the form's onsubmit, so we
+        // preventDefault to avoid a double call; onsubmit still covers Enter key.
+        document.getElementById('submitBtn').addEventListener('click', function(e) {
+            const btn = document.getElementById('submitBtn');
+            if (btn.disabled) return;
+            e.preventDefault();
+            handleFormSubmit({ preventDefault: () => {}, target: document.getElementById('orderForm') });
+        });
+
+        /* ============================================================
+           CART
+        ============================================================ */
+        const cart = {}; // { name: { price, qty, ctrlId } }
+
+        function addToCart(name, price, ctrlId) {
+            cart[name] = { price, qty: 1, ctrlId };
+            const ctrl = document.getElementById(ctrlId);
+            ctrl.classList.add('has-item');
+            ctrl.querySelector('.qty-num').textContent = 1;
+            renderCartBar();
+        }
+
+        function changeQty(name, price, delta, ctrlId) {
+            if (!cart[name]) return;
+            cart[name].qty += delta;
+            const ctrl = document.getElementById(ctrlId);
+            if (cart[name].qty <= 0) {
+                delete cart[name];
+                ctrl.classList.remove('has-item');
+            } else {
+                ctrl.querySelector('.qty-num').textContent = cart[name].qty;
+            }
+            renderCartBar();
+        }
+
+        function renderCartBar() {
+            const entries = Object.entries(cart);
+            const totalQty   = entries.reduce((s, [, v]) => s + v.qty, 0);
+            const totalPrice = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            const bar = document.getElementById('cartBar');
+            if (totalQty === 0) { bar.classList.remove('active'); return; }
+            bar.classList.add('active');
+            document.getElementById('cartCount').textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
+            document.getElementById('cartTotal').textContent = '₱' + totalPrice;
+        }
+
+        function sendCartOrder() {
+            const entries = Object.entries(cart);
+            if (!entries.length) return;
+            const lines = entries.map(([name, { price, qty }]) =>
+                qty + '× ' + name + ' — ₱' + (price * qty)
+            );
+            const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            lines.push('─────────────');
+            lines.push('Total: ₱' + total);
+            const msg = document.getElementById('f-message');
+            if (msg) msg.value = lines.join('\n');
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const f = document.getElementById('f-name');
+                if (f && !f.value) f.focus();
+            }, 600);
+        }
+
+        /* ============================================================
+           GOOGLE SHEETS INTEGRATION
+           Paste your Apps Script web app URL below after deploying.
+           See orders_script.gs for setup instructions.
+        ============================================================ */
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVrJEd4SYVHIVuoagsJO1bh-8hs68ZeEWP3iFMzKQST4NLtRHBe5v2YdTUYRPeCYHY/exec';
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form  = e.target;
+            const btn   = document.getElementById('submitBtn');
+
+            btn.textContent = 'Sending…';
+            btn.disabled = true;
+
+            const body = new URLSearchParams({
+                name:    form['name'].value,
+                email:   form['email'].value,
+                phone:   form['phone'].value,
+                date:    form['date'].value,
+                message: form['message'].value
+            });
+
+            try {
+                // no-cors: request fires without CORS preflight; response is opaque (that's fine)
+                await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body });
+                showFormState(btn, 'Order sent!', '#2D6A2D');
+                setTimeout(() => { resetFormState(btn, form); }, 3200);
+            } catch {
+                showFormState(btn, 'Something went wrong — try again', '#8B2020');
+                setTimeout(() => { resetFormState(btn, form, true); }, 3200);
+            }
+        }
+
+        function showFormState(btn, label, bg) {
+            btn.textContent = label;
+            btn.style.background = bg;
+        }
+
+        function resetFormState(btn, form, keepData = false) {
+            btn.textContent = 'Send order';
+            btn.style.background = '';
+            btn.disabled = false;
+            if (!keepData) form.reset();
+        }
+    </script>
+
+</body>
+</html>
