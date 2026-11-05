@@ -855,9 +855,53 @@
             .footer-links { gap: 20px; flex-wrap: wrap; }
 
         }
+        /* ============================================================
+           FRYING PAN CURSOR
+        ============================================================ */
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+        }
+
+        .custom-cursor {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 30px;
+            line-height: 1;
+            user-select: none;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%) rotate(0deg);
+            transition: transform 0.1s cubic-bezier(0.2, 0, 0.3, 1);
+            will-change: transform, top, left;
+            display: none;
+        }
+
+        @media (pointer: fine) {
+            .custom-cursor { display: block; }
+        }
+
+        .custom-cursor.swing {
+            transform: translate(-50%, -50%) rotate(-40deg) scale(1.2);
+        }
+
+        @keyframes btnHit {
+            0%   { transform: scale(1)    translateY(0px);  }
+            20%  { transform: scale(0.91) translateY(4px);  }
+            55%  { transform: scale(1.05) translateY(-3px); }
+            80%  { transform: scale(0.98) translateY(1px);  }
+            100% { transform: scale(1)    translateY(0px);  }
+        }
+
+        .btn-hit {
+            animation: btnHit 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+        }
     </style>
 </head>
 <body>
+
+    <!-- FRYING PAN CURSOR -->
+    <div class="custom-cursor" id="customCursor" aria-hidden="true">🍳</div>
 
     <!-- NAVIGATION -->
     <nav class="nav" id="mainNav" aria-label="Main navigation">
@@ -1329,6 +1373,30 @@
         document.getElementById('orderThisBtn').addEventListener('click', () => {
             closeQuiz();
         });
+
+        /* ============================================================
+           FRYING PAN CURSOR
+        ============================================================ */
+        (function () {
+            const cursor = document.getElementById('customCursor');
+
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top  = e.clientY + 'px';
+            }, { passive: true });
+
+            document.addEventListener('mousedown', () => cursor.classList.add('swing'));
+            document.addEventListener('mouseup',   () => cursor.classList.remove('swing'));
+
+            document.addEventListener('click', e => {
+                const btn = e.target.closest('button, a, [role="button"]');
+                if (!btn) return;
+                btn.classList.remove('btn-hit');
+                void btn.offsetWidth;
+                btn.classList.add('btn-hit');
+                btn.addEventListener('animationend', () => btn.classList.remove('btn-hit'), { once: true });
+            });
+        })();
     </script>
 
 </body>
