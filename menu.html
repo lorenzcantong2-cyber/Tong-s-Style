@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu — TONG'S STYLE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================================
+           TOKENS
+        ============================================================ */
+        :root {
+            --white:        #FAFAF9;
+            --black:        #161614;
+            --saffron:      #EEC724;
+            --saffron-pale: #FDF8DC;
+            --surface:      #F2F0EB;
+            --muted:        #78756F;
+            --border:       #DDD9CF;
+            --font-display: 'Syne', sans-serif;
+            --font-body:    'DM Sans', sans-serif;
+        }
+
+        /* ============================================================
+           RESET
+        ============================================================ */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+            scroll-padding-top: 72px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        img { display: block; max-width: 100%; }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+
+        :focus-visible {
+            outline: 2px solid var(--saffron);
+            outline-offset: 3px;
+            border-radius: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ============================================================
+           NAVIGATION
+        ============================================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 14px 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--white);
+            box-shadow: 0 1px 0 var(--border);
+            transition: padding 0.3s ease;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.05rem;
+            letter-spacing: -0.02em;
+            color: var(--black);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links li a {
+            font-size: 0.875rem;
+            font-weight: 400;
+            color: var(--muted);
+            transition: color 0.2s;
+        }
+
+        .nav-links li a:hover { color: var(--black); }
+
+        .nav-cta {
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            color: var(--black) !important;
+            background: var(--saffron);
+            padding: 9px 20px;
+            border-radius: 2px;
+            transition: opacity 0.2s !important;
+        }
+
+        .nav-cta:hover { opacity: 0.82; }
+
+        /* ============================================================
+           PAGE HEADER
+        ============================================================ */
+        .page-header {
+            padding: 120px 48px 60px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .page-header-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .page-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .page-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(2.8rem, 7vw, 6rem);
+            line-height: 0.92;
+            letter-spacing: -0.03em;
+        }
+
+        /* ============================================================
+           MENU
+        ============================================================ */
+        .menu {
+            padding: 80px 48px 100px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 56px;
+        }
+
+        .section-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: clamp(2.2rem, 5vw, 4rem);
+            line-height: 0.95;
+            letter-spacing: -0.025em;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            background: var(--border);
+        }
+
+        .menu-item {
+            background: var(--white);
+            overflow: hidden;
+            transition: background 0.2s;
+        }
+
+        .menu-item:hover { background: var(--surface); }
+
+        .menu-cart-ctrl { margin-top: 16px; }
+
+        .btn-add-cart {
+            display: block;
+            width: 100%;
+            padding: 11px 20px;
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            letter-spacing: 0.02em;
+            transition: opacity 0.2s;
+            border-radius: 2px;
+        }
+        .btn-add-cart:hover { opacity: 0.82; }
+
+        .qty-controls {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--saffron);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .menu-cart-ctrl.has-item .btn-add-cart { display: none; }
+        .menu-cart-ctrl.has-item .qty-controls  { display: flex; }
+
+        .qty-btn {
+            width: 42px;
+            height: 40px;
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            font-weight: 300;
+            cursor: pointer;
+            color: var(--black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s;
+        }
+        .qty-btn:hover { background: rgba(0,0,0,0.1); }
+
+        .qty-num {
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--black);
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .menu-img-wrap { overflow: hidden; }
+
+        .menu-img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.85);
+            transition: filter 0.35s, transform 0.45s cubic-bezier(0.2, 0, 0.3, 1);
+        }
+
+        .menu-item:hover .menu-img {
+            filter: saturate(1);
+            transform: scale(1.04);
+        }
+
+        .menu-item-body {
+            padding: 20px 20px 22px;
+        }
+
+        .menu-item-name {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+        }
+
+        .menu-item-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.55;
+            margin-bottom: 14px;
+        }
+
+        .menu-item-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .menu-item-price {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .menu-item-badge {
+            font-size: 0.72rem;
+            font-weight: 400;
+            padding: 3px 8px;
+            background: var(--saffron-pale);
+            border-radius: 2px;
+        }
+
+        /* ---- Floating cart bar ---- */
+        .cart-bar {
+            position: fixed;
+            bottom: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 16px 14px 22px;
+            border-radius: 4px;
+            min-width: 300px;
+            max-width: 480px;
+            width: calc(100% - 48px);
+            z-index: 300;
+            transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+        }
+        .cart-bar.active { bottom: 24px; }
+
+        .cart-bar-info { display: flex; flex-direction: column; gap: 1px; }
+
+        .cart-bar-count {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.55);
+            font-weight: 400;
+        }
+        .cart-bar-total {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .cart-bar-send {
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+        .cart-bar-send:hover { opacity: 0.85; }
+
+        /* ============================================================
+           ORDER FORM
+        ============================================================ */
+        .order-section {
+            padding: 100px 48px;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .order-form {
+            display: grid;
+            gap: 44px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 36px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label {
+            font-size: 0.78rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        .form-input,
+        .form-textarea {
+            font-family: var(--font-body);
+            font-size: 0.975rem;
+            font-weight: 300;
+            color: var(--black);
+            background: none;
+            border: none;
+            border-bottom: 1.5px solid var(--border);
+            padding: 10px 0;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--black);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: var(--border);
+        }
+
+        .form-textarea {
+            resize: none;
+            min-height: 96px;
+            line-height: 1.6;
+        }
+
+        .form-submit {
+            align-self: flex-start;
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 17px 36px;
+            border-radius: 2px;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .form-submit:hover { opacity: 0.72; transform: translateY(-1px); }
+        .form-submit:disabled { opacity: 0.5; transform: none; cursor: default; }
+
+        /* ============================================================
+           FOOTER
+        ============================================================ */
+        .footer {
+            background: var(--black);
+            padding: 64px 48px 44px;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 48px;
+        }
+
+        .footer-brand-name {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--white);
+            letter-spacing: -0.025em;
+        }
+
+        .footer-brand-tag {
+            font-size: 0.82rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.35);
+            margin-top: 8px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            gap: 36px;
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.35);
+            font-size: 0.875rem;
+            font-weight: 300;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 36px auto 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.07);
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.22);
+            font-weight: 300;
+        }
+
+        /* ============================================================
+           HAMBURGER / MOBILE NAV
+        ============================================================ */
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 151;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
+        }
+        .nav-hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--black);
+            display: block;
+            border-radius: 1px;
+            transition: transform 0.28s ease, opacity 0.2s ease;
+        }
+
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        .nav-mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--white);
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
+        }
+        .nav-mobile-overlay.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: all;
+        }
+        .nav-mobile-overlay a {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--black);
+            letter-spacing: -0.02em;
+            padding: 12px 24px;
+            min-height: 56px;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s;
+        }
+        .nav-mobile-overlay a:active { color: var(--muted); }
+        .nav-mobile-overlay .nav-cta {
+            margin-top: 20px;
+            background: var(--saffron);
+            color: var(--black) !important;
+            padding: 16px 40px;
+            border-radius: 2px;
+            font-size: 1rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            letter-spacing: 0;
+            min-height: 52px;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 960px) {
+            .menu-grid { grid-template-columns: repeat(2, 1fr); }
+            html { scroll-padding-top: 60px; }
+        }
+
+        @media (max-width: 680px) {
+            html { scroll-padding-top: 56px; }
+
+            .nav { padding: 11px 20px; }
+            .nav-links { display: none !important; }
+            .nav-hamburger { display: flex; }
+
+            .page-header { padding: 90px 20px 40px; }
+
+            .menu { padding: 48px 16px 60px; }
+            .section-header { margin-bottom: 36px; }
+            .menu-grid { grid-template-columns: 1fr; }
+            .btn-add-cart { min-height: 48px; font-size: 0.9rem; }
+            .qty-btn { width: 52px; height: 48px; font-size: 1.4rem; }
+
+            .order-section { padding: 60px 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 32px; }
+            .form-input, .form-textarea { font-size: 1rem; padding: 12px 0; }
+            .form-textarea { min-height: 110px; }
+            .form-submit {
+                width: 100%;
+                text-align: center;
+                align-self: stretch;
+                padding: 18px;
+                font-size: 1rem;
+            }
+
+            .footer { padding: 48px 20px 36px; }
+            .footer-inner { flex-direction: column; gap: 28px; }
+            .footer-links { gap: 20px; flex-wrap: wrap; }
+
+            .cart-bar {
+                width: calc(100% - 32px);
+                border-radius: 10px;
+                bottom: calc(-100px - env(safe-area-inset-bottom, 0px));
+                padding: 14px 16px;
+                padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+            }
+            .cart-bar.active {
+                bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+            }
+            .cart-bar-send { padding: 12px 18px; min-height: 44px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION -->
+    <nav class="nav" id="mainNav" aria-label="Main navigation">
+        <a href="index.html" class="nav-logo">TONG'S STYLE</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="index.html#testimonials">Reviews</a></li>
+            <li><a href="#order" class="nav-cta">Order now</a></li>
+        </ul>
+        <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Open menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- MOBILE NAV OVERLAY -->
+    <div class="nav-mobile-overlay" id="mobileNav" role="dialog" aria-label="Mobile navigation">
+        <a href="#menu"               onclick="closeMobileMenu()">Menu</a>
+        <a href="index.html#testimonials" onclick="closeMobileMenu()">Reviews</a>
+        <a href="#order" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <header class="page-header">
+        <div class="page-header-inner">
+            <p class="page-label">What we make</p>
+            <h1 class="page-title">The menu.</h1>
+        </div>
+    </header>
+
+    <!-- MENU -->
+    <section class="menu" id="menu" aria-label="Menu">
+        <div class="menu-grid">
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="Food/sisig.jpg?v=2"
+                         alt="Classic Sisig Combo" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Classic Sisig Combo</h3>
+                    <p class="menu-item-desc">Sizzling pork sisig, egg on top, garlic rice, chicharon crumble, and your drink of choice.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;180</span>
+                        <span class="menu-item-badge">Bestseller</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-sisig-combo">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Classic Sisig Combo', 180, 'ctrl-sisig-combo')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, -1, 'ctrl-sisig-combo')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, 1, 'ctrl-sisig-combo')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="TONG's Burger Combo" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">TONG's Burger Combo</h3>
+                    <p class="menu-item-desc">Double smash patty, special sauce, coleslaw, house pickles. Fries and a drink included.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;225</span>
+                        <span class="menu-item-badge">Staff pick</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-burger-combo">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('TONG\'s Burger Combo', 225, 'ctrl-burger-combo')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, -1, 'ctrl-burger-combo')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, 1, 'ctrl-burger-combo')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="The OG Wapr" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">The OG Wapr</h3>
+                    <p class="menu-item-desc">Waffle wrap stuffed with sisig or burger, cheese sauce, pickled veg, and house aioli.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;130</span>
+                        <span class="menu-item-badge">New</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-og-wapr">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('The OG Wapr', 130, 'ctrl-og-wapr')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, -1, 'ctrl-og-wapr')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, 1, 'ctrl-og-wapr')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Sisig Rice Bowl" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Sisig Rice Bowl</h3>
+                    <p class="menu-item-desc">Sisig over garlic fried rice, sunny-side egg, crispy chicharon, drizzle of spiced vinegar.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;90</span>
+                        <span class="menu-item-badge">Solo</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-rice-bowl">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Sisig Rice Bowl', 90, 'ctrl-rice-bowl')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, -1, 'ctrl-rice-bowl')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, 1, 'ctrl-rice-bowl')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Barkada Platter" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Barkada Platter</h3>
+                    <p class="menu-item-desc">Full sisig platter, 4 mini burgers, 4 waprs, 4 drinks. Everyone eats. No one complains.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;680</span>
+                        <span class="menu-item-badge">Feeds 4–5</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-barkada">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Barkada Platter', 680, 'ctrl-barkada')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, -1, 'ctrl-barkada')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, 1, 'ctrl-barkada')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="menu-item">
+                <div class="menu-img-wrap">
+                    <img class="menu-img"
+                         src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=450&q=80"
+                         alt="Sweet Wapr" loading="lazy">
+                </div>
+                <div class="menu-item-body">
+                    <h3 class="menu-item-name">Sweet Wapr</h3>
+                    <p class="menu-item-desc">Dessert waffle wrap with Nutella, fresh banana, crushed graham, and a dusting of sugar.</p>
+                    <div class="menu-item-footer">
+                        <span class="menu-item-price">&#x20B1;85</span>
+                        <span class="menu-item-badge">Dessert</span>
+                    </div>
+                    <div class="menu-cart-ctrl" id="ctrl-sweet-wapr">
+                        <button class="btn-add-cart" type="button" onclick="addToCart('Sweet Wapr', 85, 'ctrl-sweet-wapr')">+ Add to cart</button>
+                        <div class="qty-controls">
+                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, -1, 'ctrl-sweet-wapr')">−</button>
+                            <span class="qty-num">1</span>
+                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, 1, 'ctrl-sweet-wapr')">+</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+    </section>
+
+    <!-- ORDER FORM -->
+    <section class="order-section" id="order" aria-label="Place an order">
+        <div class="section-header">
+            <p class="section-label">Place your order</p>
+            <h2 class="section-title">Let's get<br>this started.</h2>
+        </div>
+        <form class="order-form" id="orderForm" onsubmit="handleFormSubmit(event)" novalidate>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="f-name">Name</label>
+                    <input class="form-input" type="text" id="f-name" name="name" placeholder="Your full name" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-email">Email</label>
+                    <input class="form-input" type="email" id="f-email" name="email" placeholder="your@email.com" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="f-phone">Phone</label>
+                    <input class="form-input" type="tel" id="f-phone" name="phone" placeholder="+63 9XX XXX XXXX" required autocomplete="tel">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="f-date">Date needed</label>
+                    <input class="form-input" type="date" id="f-date" name="date" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="f-message">What you want</label>
+                <textarea class="form-textarea" id="f-message" name="message" placeholder="Tell us your order, quantity, and any special requests..." rows="4"></textarea>
+            </div>
+            <button type="submit" class="form-submit" id="submitBtn">Send order</button>
+        </form>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-brand-name">TONG'S STYLE</div>
+                <div class="footer-brand-tag">No gatekeeping. Prepped Fresh and ready to roll.</div>
+            </div>
+            <ul class="footer-links">
+                <li><a href="#menu">Menu</a></li>
+                <li><a href="#order">Order</a></li>
+                <li><a href="mailto:hello@tongsstyle.ph">Contact</a></li>
+            </ul>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2024 TONG'S STYLE. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- FLOATING CART BAR -->
+    <div class="cart-bar" id="cartBar" role="status" aria-live="polite">
+        <div class="cart-bar-info">
+            <span class="cart-bar-count" id="cartCount">0 items</span>
+            <span class="cart-bar-total" id="cartTotal">&#x20B1;0</span>
+        </div>
+        <button class="cart-bar-send" onclick="sendCartOrder()">Send Order &#x2192;</button>
+    </div>
+
+    <script>
+        /* ============================================================
+           MOBILE NAV
+        ============================================================ */
+        function toggleMobileMenu() {
+            const btn     = document.getElementById('navHamburger');
+            const overlay = document.getElementById('mobileNav');
+            const isOpen  = overlay.classList.toggle('open');
+            btn.classList.toggle('open', isOpen);
+            btn.setAttribute('aria-expanded', String(isOpen));
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('navHamburger').classList.remove('open');
+            document.getElementById('mobileNav').classList.remove('open');
+            document.getElementById('navHamburger').setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        /* ============================================================
+           CART
+        ============================================================ */
+        const cart = {};
+
+        function addToCart(name, price, ctrlId) {
+            cart[name] = { price, qty: 1, ctrlId };
+            const ctrl = document.getElementById(ctrlId);
+            ctrl.classList.add('has-item');
+            ctrl.querySelector('.qty-num').textContent = 1;
+            renderCartBar();
+        }
+
+        function changeQty(name, price, delta, ctrlId) {
+            if (!cart[name]) return;
+            cart[name].qty += delta;
+            const ctrl = document.getElementById(ctrlId);
+            if (cart[name].qty <= 0) {
+                delete cart[name];
+                ctrl.classList.remove('has-item');
+            } else {
+                ctrl.querySelector('.qty-num').textContent = cart[name].qty;
+            }
+            renderCartBar();
+        }
+
+        function renderCartBar() {
+            const entries = Object.entries(cart);
+            const totalQty   = entries.reduce((s, [, v]) => s + v.qty, 0);
+            const totalPrice = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            const bar = document.getElementById('cartBar');
+            if (totalQty === 0) { bar.classList.remove('active'); return; }
+            bar.classList.add('active');
+            document.getElementById('cartCount').textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
+            document.getElementById('cartTotal').textContent = '₱' + totalPrice;
+        }
+
+        function sendCartOrder() {
+            const entries = Object.entries(cart);
+            if (!entries.length) return;
+            const lines = entries.map(([name, { price, qty }]) =>
+                qty + '× ' + name + ' — ₱' + (price * qty)
+            );
+            const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            lines.push('─────────────');
+            lines.push('Total: ₱' + total);
+            const msg = document.getElementById('f-message');
+            if (msg) msg.value = lines.join('\n');
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => {
+                const f = document.getElementById('f-name');
+                if (f && !f.value) f.focus();
+            }, 600);
+        }
+
+        /* ============================================================
+           GOOGLE SHEETS INTEGRATION
+        ============================================================ */
+        const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVrJEd4SYVHIVuoagsJO1bh-8hs68ZeEWP3iFMzKQST4NLtRHBe5v2YdTUYRPeCYHY/exec';
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const btn  = document.getElementById('submitBtn');
+
+            btn.textContent = 'Sending…';
+            btn.disabled = true;
+
+            const body = new URLSearchParams({
+                name:    form['name'].value,
+                email:   form['email'].value,
+                phone:   form['phone'].value,
+                date:    form['date'].value,
+                message: form['message'].value
+            });
+
+            try {
+                await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body });
+                showFormState(btn, 'Order sent!', '#2D6A2D');
+                setTimeout(() => { resetFormState(btn, form); }, 3200);
+            } catch {
+                showFormState(btn, 'Something went wrong — try again', '#8B2020');
+                setTimeout(() => { resetFormState(btn, form, true); }, 3200);
+            }
+        }
+
+        function showFormState(btn, label, bg) {
+            btn.textContent = label;
+            btn.style.background = bg;
+        }
+
+        function resetFormState(btn, form, keepData = false) {
+            btn.textContent = 'Send order';
+            btn.style.background = '';
+            btn.disabled = false;
+            if (!keepData) form.reset();
+        }
+
+        document.getElementById('submitBtn').addEventListener('click', function(e) {
+            const btn = document.getElementById('submitBtn');
+            if (btn.disabled) return;
+            e.preventDefault();
+            handleFormSubmit({ preventDefault: () => {}, target: document.getElementById('orderForm') });
+        });
+    </script>
+
+</body>
+</html>
