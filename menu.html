@@ -601,29 +601,132 @@
         ============================================================ */
         .cart-bar {
             position: fixed;
-            bottom: -90px;
+            bottom: -500px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--black);
             color: var(--white);
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 14px 16px 14px 22px;
-            border-radius: 4px;
-            min-width: 300px;
-            max-width: 480px;
+            flex-direction: column;
             width: calc(100% - 48px);
+            max-width: 540px;
             z-index: 300;
-            transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+            transition: bottom 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.38);
+            border-radius: 6px;
+            overflow: hidden;
         }
         .cart-bar.active { bottom: 24px; }
+
+        .cart-bar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.09);
+        }
+        .cart-bar-title {
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            color: var(--white);
+        }
+        .cart-bar-clear {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.38);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px 6px;
+            transition: color 0.18s;
+        }
+        .cart-bar-clear:hover { color: rgba(255,255,255,0.75); }
+
+        .cart-bar-items {
+            max-height: 196px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.12) transparent;
+        }
+        .cart-bar-items::-webkit-scrollbar { width: 3px; }
+        .cart-bar-items::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+        .cart-item-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 9px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .cart-item-row:last-child { border-bottom: none; }
+
+        .cart-item-name {
+            flex: 1;
+            font-size: 0.82rem;
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: rgba(255,255,255,0.88);
+        }
+
+        .cart-item-qty {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .cart-qty-btn {
+            width: 26px;
+            height: 26px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.14);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 400;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 3px;
+            transition: background 0.15s;
+            line-height: 1;
+        }
+        .cart-qty-btn:hover { background: rgba(255,255,255,0.2); }
+
+        .cart-qty-num {
+            font-family: var(--font-display);
+            font-size: 0.88rem;
+            font-weight: 700;
+            min-width: 20px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .cart-item-price {
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--saffron);
+            flex-shrink: 0;
+            min-width: 64px;
+            text-align: right;
+        }
+
+        .cart-bar-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 11px 16px;
+            border-top: 1px solid rgba(255,255,255,0.09);
+            gap: 16px;
+        }
         .cart-bar-info { display: flex; flex-direction: column; gap: 1px; }
-        .cart-bar-count { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 400; }
-        .cart-bar-total { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
-        .cart-bar-send { background: var(--saffron); color: var(--black); font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; padding: 10px 20px; border: none; border-radius: 2px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+        .cart-bar-count { font-size: 0.72rem; color: rgba(255,255,255,0.45); font-weight: 400; }
+        .cart-bar-total { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
+        .cart-bar-send { background: var(--saffron); color: var(--black); font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; padding: 10px 22px; border: none; border-radius: 3px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
         .cart-bar-send:hover { opacity: 0.85; }
 
         /* ============================================================
@@ -731,8 +834,9 @@
             .footer-inner { flex-direction: column; gap: 28px; }
             .footer-links { gap: 20px; flex-wrap: wrap; }
 
-            .cart-bar { width: calc(100% - 32px); border-radius: 10px; bottom: calc(-100px - env(safe-area-inset-bottom, 0px)); padding: 14px 16px; padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
-            .cart-bar.active { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+            .cart-bar { width: calc(100% - 24px); border-radius: 10px; bottom: calc(-600px - env(safe-area-inset-bottom, 0px)); }
+            .cart-bar.active { bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
+            .cart-bar-footer { padding-bottom: calc(11px + env(safe-area-inset-bottom, 0px)); }
             .cart-bar-send { padding: 12px 18px; min-height: 44px; }
         }
 
@@ -1097,11 +1201,18 @@
 
     <!-- FLOATING CART BAR -->
     <div class="cart-bar" id="cartBar" role="status" aria-live="polite">
-        <div class="cart-bar-info">
-            <span class="cart-bar-count" id="cartCount">0 items</span>
-            <span class="cart-bar-total" id="cartTotal">&#x20B1;0</span>
+        <div class="cart-bar-header">
+            <span class="cart-bar-title">🛒 Your Order</span>
+            <button class="cart-bar-clear" onclick="clearCart()">Clear all</button>
         </div>
-        <button class="cart-bar-send" onclick="sendCartOrder()">Send Order &#x2192;</button>
+        <div class="cart-bar-items" id="cartItems"></div>
+        <div class="cart-bar-footer">
+            <div class="cart-bar-info">
+                <span class="cart-bar-count" id="cartCount">0 items</span>
+                <span class="cart-bar-total" id="cartTotal">&#x20B1;0</span>
+            </div>
+            <button class="cart-bar-send" onclick="sendCartOrder()">Send Order &#x2192;</button>
+        </div>
     </div>
 
     <script>
@@ -1415,6 +1526,31 @@
             bar.classList.add('active');
             document.getElementById('cartCount').textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
             document.getElementById('cartTotal').textContent = '₱' + totalPrice.toLocaleString();
+
+            document.getElementById('cartItems').innerHTML = entries.map(([name, { price, qty }]) => {
+                const safeName = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+                return `<div class="cart-item-row">
+                    <span class="cart-item-name" title="${name}">${name}</span>
+                    <div class="cart-item-qty">
+                        <button class="cart-qty-btn" onclick="cartQtyChange('${safeName}', -1)" aria-label="Remove one">−</button>
+                        <span class="cart-qty-num">${qty}</span>
+                        <button class="cart-qty-btn" onclick="cartQtyChange('${safeName}', 1)" aria-label="Add one">+</button>
+                    </div>
+                    <span class="cart-item-price">₱${(price * qty).toLocaleString()}</span>
+                </div>`;
+            }).join('');
+        }
+
+        function cartQtyChange(name, delta) {
+            if (!cart[name]) return;
+            cart[name].qty += delta;
+            if (cart[name].qty <= 0) delete cart[name];
+            renderCartBar();
+        }
+
+        function clearCart() {
+            Object.keys(cart).forEach(k => delete cart[k]);
+            document.getElementById('cartBar').classList.remove('active');
         }
 
         function sendCartOrder() {
