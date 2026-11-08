@@ -449,7 +449,7 @@
         .sisig-banner {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 340px;
+            min-height: 250px;
             overflow: hidden;
             margin-top: var(--nav-h);
         }
@@ -476,11 +476,11 @@
 
         .sisig-banner-text {
             background: var(--black);
-            padding: 40px 44px;
+            padding: 24px 32px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 14px;
+            gap: 8px;
         }
 
         .sisig-banner-label {
@@ -494,10 +494,10 @@
         .sisig-banner-title {
             font-family: var(--font-display);
             font-weight: 800;
-            font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+            font-size: clamp(1rem, 1.8vw, 1.5rem);
             color: var(--white);
-            line-height: 1.1;
-            letter-spacing: -0.025em;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
         }
 
         .sisig-banner-title em {
@@ -516,17 +516,17 @@
         .sisig-banner-cta {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             background: var(--saffron);
             color: var(--black);
             font-family: var(--font-body);
-            font-size: 0.9rem;
+            font-size: 0.78rem;
             font-weight: 500;
-            padding: 14px 28px;
+            padding: 9px 18px;
             border-radius: 2px;
             align-self: flex-start;
             transition: opacity 0.2s, transform 0.15s;
-            margin-top: 8px;
+            margin-top: 4px;
         }
 
         .sisig-banner-cta:hover { opacity: 0.85; transform: translateY(-1px); }
@@ -664,13 +664,13 @@
         ============================================================ */
         @media (max-width: 960px) {
             .sisig-banner { grid-template-columns: 1fr; min-height: auto; }
-            .sisig-banner-img-wrap { height: 220px; }
+            .sisig-banner-img-wrap { height: 150px; }
         }
 
         @media (max-width: 680px) {
-            .sisig-banner-img-wrap { height: 180px; }
-            .sisig-banner-text { padding: 32px 20px; }
-            .sisig-banner-title { font-size: 1.5rem; }
+            .sisig-banner-img-wrap { height: 120px; }
+            .sisig-banner-text { padding: 20px 16px; }
+            .sisig-banner-title { font-size: 1rem; }
         }
 
         @media (max-width: 1100px) {
