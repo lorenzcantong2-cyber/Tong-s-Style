@@ -137,7 +137,7 @@
            MENU WRAPPER
         ============================================================ */
         .menu-wrap {
-            padding: calc(var(--nav-h) + 32px) 24px 56px;
+            padding: 32px 24px 56px;
             min-height: 100vh;
         }
 
@@ -449,8 +449,9 @@
         .sisig-banner {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            min-height: 500px;
+            min-height: 340px;
             overflow: hidden;
+            margin-top: var(--nav-h);
         }
 
         .sisig-banner-img-wrap {
@@ -475,11 +476,11 @@
 
         .sisig-banner-text {
             background: var(--black);
-            padding: 64px 56px;
+            padding: 40px 44px;
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 20px;
+            gap: 14px;
         }
 
         .sisig-banner-label {
@@ -493,9 +494,9 @@
         .sisig-banner-title {
             font-family: var(--font-display);
             font-weight: 800;
-            font-size: clamp(2rem, 3.6vw, 3.2rem);
+            font-size: clamp(1.5rem, 2.6vw, 2.4rem);
             color: var(--white);
-            line-height: 1.05;
+            line-height: 1.1;
             letter-spacing: -0.025em;
         }
 
@@ -663,13 +664,13 @@
         ============================================================ */
         @media (max-width: 960px) {
             .sisig-banner { grid-template-columns: 1fr; min-height: auto; }
-            .sisig-banner-img-wrap { height: 300px; }
+            .sisig-banner-img-wrap { height: 220px; }
         }
 
         @media (max-width: 680px) {
-            .sisig-banner-img-wrap { height: 240px; }
-            .sisig-banner-text { padding: 44px 20px; }
-            .sisig-banner-title { font-size: 1.9rem; }
+            .sisig-banner-img-wrap { height: 180px; }
+            .sisig-banner-text { padding: 32px 20px; }
+            .sisig-banner-title { font-size: 1.5rem; }
         }
 
         @media (max-width: 1100px) {
@@ -761,6 +762,22 @@
         <a href="#order" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
     </div>
 
+    <!-- SISIG BANNER -->
+    <section class="sisig-banner" aria-label="Sisig feature">
+        <div class="sisig-banner-img-wrap">
+            <img class="sisig-banner-img"
+                 src="Food/sisig.jpg?v=2"
+                 alt="Sizzling Sisig — TONG'S STYLE"
+                 loading="eager">
+        </div>
+        <div class="sisig-banner-text">
+            <p class="sisig-banner-label">The one that started it all</p>
+            <hr class="sisig-banner-rule">
+            <h2 class="sisig-banner-title">No gatekeeping.<br><em>Prepped Fresh</em><br>and ready to roll.</h2>
+            <a href="#order" class="sisig-banner-cta">Order now &rarr;</a>
+        </div>
+    </section>
+
     <!-- ======================================================
          THREE-COLUMN MENU LAYOUT
     ====================================================== -->
@@ -805,22 +822,6 @@
 
         </div>
     </div>
-
-    <!-- SISIG BANNER -->
-    <section class="sisig-banner" aria-label="Sisig feature">
-        <div class="sisig-banner-img-wrap">
-            <img class="sisig-banner-img"
-                 src="Food/sisig.jpg?v=2"
-                 alt="Sizzling Sisig — TONG'S STYLE"
-                 loading="lazy">
-        </div>
-        <div class="sisig-banner-text">
-            <p class="sisig-banner-label">The one that started it all</p>
-            <hr class="sisig-banner-rule">
-            <h2 class="sisig-banner-title">No gatekeeping.<br><em>Prepped Fresh</em><br>and ready to roll.</h2>
-            <a href="#order" class="sisig-banner-cta">Order now &rarr;</a>
-        </div>
-    </section>
 
     <!-- ORDER FORM -->
     <section class="order-section" id="order" aria-label="Place an order">
