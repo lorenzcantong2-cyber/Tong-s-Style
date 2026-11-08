@@ -189,6 +189,21 @@
             max-width: 400px;
         }
 
+        .hero-datetime {
+            font-family: var(--font-body);
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero-datetime .datetime-time {
+            color: var(--saffron);
+            font-weight: 500;
+        }
+
         .hero-actions {
             display: flex;
             gap: 14px;
@@ -930,6 +945,9 @@
         <div class="hero-content">
             <h1 class="hero-title">TONG'S<br>STYLE</h1>
             <p class="hero-tagline">No gatekeeping.<br>Prepped Fresh and ready to roll.</p>
+            <div class="hero-datetime" id="heroDatetime" aria-live="polite">
+                <span id="heroDate"></span> &mdash; <span class="datetime-time" id="heroTime"></span>
+            </div>
             <div class="hero-actions">
                 <button class="btn-primary" onclick="openQuiz()">Find your order</button>
                 <a href="menu.html" class="btn-ghost">See the menu</a>
@@ -1114,6 +1132,19 @@
     </footer>
 
     <script>
+        /* ============================================================
+           LIVE DATE & TIME
+        ============================================================ */
+        function updateHeroDatetime() {
+            const now = new Date();
+            const dateOpts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            const timeOpts = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+            document.getElementById('heroDate').textContent = now.toLocaleDateString('en-PH', dateOpts);
+            document.getElementById('heroTime').textContent = now.toLocaleTimeString('en-PH', timeOpts);
+        }
+        updateHeroDatetime();
+        setInterval(updateHeroDatetime, 1000);
+
         /* ============================================================
            MOBILE NAV
         ============================================================ */
