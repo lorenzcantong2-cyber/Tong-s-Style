@@ -535,9 +535,7 @@
            ORDER FORM
         ============================================================ */
         .order-section {
-            padding: 100px 48px;
-            max-width: 760px;
-            margin: 0 auto;
+            display: none;
         }
 
         .section-header { margin-bottom: 56px; }
@@ -728,6 +726,103 @@
         .cart-bar-total { font-family: var(--font-display); font-size: 1rem; font-weight: 700; }
         .cart-bar-send { background: var(--saffron); color: var(--black); font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; padding: 10px 22px; border: none; border-radius: 3px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
         .cart-bar-send:hover { opacity: 0.85; }
+
+        /* ---- Two-panel switching ---- */
+        .cart-view { display: flex; flex-direction: column; }
+        .cart-form-view { display: none; flex-direction: column; max-height: 480px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.1) transparent; }
+        .cart-bar.form-open .cart-view { display: none; }
+        .cart-bar.form-open .cart-form-view { display: flex; }
+
+        /* ---- Cart order form ---- */
+        .cart-form-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.09);
+            position: sticky;
+            top: 0;
+            background: var(--black);
+            z-index: 1;
+        }
+        .cart-form-back {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.82rem;
+            cursor: pointer;
+            padding: 4px 6px;
+            transition: color 0.18s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cart-form-back:hover { color: var(--white); }
+        .cart-form-title {
+            font-family: var(--font-display);
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+        .cart-form-summary {
+            padding: 10px 16px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.6;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .cart-form-summary strong { color: var(--saffron); font-weight: 500; }
+        .cart-form-fields {
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .cb-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .cb-group { display: flex; flex-direction: column; gap: 4px; }
+        .cb-label { font-size: 0.68rem; color: rgba(255,255,255,0.38); letter-spacing: 0.08em; text-transform: uppercase; }
+        .cb-input, .cb-textarea {
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--white);
+            background: none;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.18);
+            padding: 7px 0;
+            outline: none;
+            width: 100%;
+            transition: border-color 0.2s;
+        }
+        .cb-input:focus, .cb-textarea:focus { border-color: var(--saffron); }
+        .cb-input::placeholder, .cb-textarea::placeholder { color: rgba(255,255,255,0.2); }
+        .cb-textarea { resize: none; min-height: 60px; line-height: 1.5; }
+        .cb-submit {
+            width: 100%;
+            background: var(--saffron);
+            color: var(--black);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 13px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            margin-top: 4px;
+        }
+        .cb-submit:hover { opacity: 0.85; }
+        .cb-submit:disabled { opacity: 0.5; cursor: default; }
+        .cart-form-footer {
+            padding: 10px 16px;
+            border-top: 1px solid rgba(255,255,255,0.09);
+            font-size: 0.72rem;
+            color: rgba(255,255,255,0.35);
+            text-align: center;
+            position: sticky;
+            bottom: 0;
+            background: var(--black);
+        }
 
         /* ============================================================
            FRYING PAN CURSOR
@@ -1201,18 +1296,60 @@
 
     <!-- FLOATING CART BAR -->
     <div class="cart-bar" id="cartBar" role="status" aria-live="polite">
-        <div class="cart-bar-header">
-            <span class="cart-bar-title">🛒 Your Order</span>
-            <button class="cart-bar-clear" onclick="clearCart()">Clear all</button>
-        </div>
-        <div class="cart-bar-items" id="cartItems"></div>
-        <div class="cart-bar-footer">
-            <div class="cart-bar-info">
-                <span class="cart-bar-count" id="cartCount">0 items</span>
-                <span class="cart-bar-total" id="cartTotal">&#x20B1;0</span>
+
+        <!-- PANEL 1: CART VIEW -->
+        <div class="cart-view">
+            <div class="cart-bar-header">
+                <span class="cart-bar-title">🛒 Your Order</span>
+                <button class="cart-bar-clear" onclick="clearCart()">Clear all</button>
             </div>
-            <button class="cart-bar-send" onclick="sendCartOrder()">Send Order &#x2192;</button>
+            <div class="cart-bar-items" id="cartItems"></div>
+            <div class="cart-bar-footer">
+                <div class="cart-bar-info">
+                    <span class="cart-bar-count" id="cartCount">0 items</span>
+                    <span class="cart-bar-total" id="cartTotal">&#x20B1;0</span>
+                </div>
+                <button class="cart-bar-send" onclick="openCartForm()">Send Order &#x2192;</button>
+            </div>
         </div>
+
+        <!-- PANEL 2: ORDER FORM VIEW -->
+        <div class="cart-form-view" id="cartFormView">
+            <div class="cart-form-header">
+                <button class="cart-form-back" onclick="closeCartForm()">&#x2190; Back</button>
+                <span class="cart-form-title">Place Your Order</span>
+            </div>
+            <div class="cart-form-summary" id="cartFormSummary"></div>
+            <div class="cart-form-fields">
+                <div class="cb-row">
+                    <div class="cb-group">
+                        <label class="cb-label" for="cb-name">Name</label>
+                        <input class="cb-input" type="text" id="cb-name" placeholder="Your full name" required autocomplete="name">
+                    </div>
+                    <div class="cb-group">
+                        <label class="cb-label" for="cb-email">Email</label>
+                        <input class="cb-input" type="email" id="cb-email" placeholder="your@email.com" required autocomplete="email">
+                    </div>
+                </div>
+                <div class="cb-row">
+                    <div class="cb-group">
+                        <label class="cb-label" for="cb-phone">Phone</label>
+                        <input class="cb-input" type="tel" id="cb-phone" placeholder="+63 9XX XXX XXXX" required autocomplete="tel">
+                    </div>
+                    <div class="cb-group">
+                        <label class="cb-label" for="cb-date">Date needed</label>
+                        <input class="cb-input" type="date" id="cb-date" required>
+                    </div>
+                </div>
+                <div class="cb-group">
+                    <label class="cb-label" for="cb-notes">Special requests</label>
+                    <textarea class="cb-textarea" id="cb-notes" placeholder="Any add-ons, allergies, or notes..." rows="2"></textarea>
+                </div>
+                <button class="cb-submit" id="cbSubmitBtn" onclick="handleCartFormSubmit()">Confirm Order &#x2192;</button>
+            </div>
+            <div class="cart-form-footer" id="cartFormFooter">Total: <strong id="cartFormTotal"></strong></div>
+        </div>
+
     </div>
 
     <script>
@@ -1553,17 +1690,21 @@
             document.getElementById('cartBar').classList.remove('active');
         }
 
-        function sendCartOrder() {
+        function openCartForm() {
             const entries = Object.entries(cart);
             if (!entries.length) return;
-            const lines = entries.map(([name, { price, qty }]) => qty + '× ' + name + ' — ₱' + (price * qty).toLocaleString());
             const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
-            lines.push('─────────────');
-            lines.push('Total: ₱' + total.toLocaleString());
-            const msg = document.getElementById('f-message');
-            if (msg) msg.value = lines.join('\n');
-            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => { const f = document.getElementById('f-name'); if (f && !f.value) f.focus(); }, 600);
+            const lines = entries.map(([name, { price, qty }]) =>
+                `<strong>${qty}&times; ${name}</strong> &mdash; &#x20B1;${(price * qty).toLocaleString()}`
+            );
+            document.getElementById('cartFormSummary').innerHTML = lines.join('<br>');
+            document.getElementById('cartFormTotal').textContent = '₱' + total.toLocaleString();
+            document.getElementById('cartBar').classList.add('form-open');
+            setTimeout(() => { const f = document.getElementById('cb-name'); if (f && !f.value) f.focus(); }, 120);
+        }
+
+        function closeCartForm() {
+            document.getElementById('cartBar').classList.remove('form-open');
         }
 
         /* ============================================================
@@ -1590,32 +1731,47 @@
         ============================================================ */
         const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVrJEd4SYVHIVuoagsJO1bh-8hs68ZeEWP3iFMzKQST4NLtRHBe5v2YdTUYRPeCYHY/exec';
 
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const btn  = document.getElementById('submitBtn');
+        async function handleCartFormSubmit() {
+            const btn   = document.getElementById('cbSubmitBtn');
+            const name  = document.getElementById('cb-name').value.trim();
+            const email = document.getElementById('cb-email').value.trim();
+            const phone = document.getElementById('cb-phone').value.trim();
+            const date  = document.getElementById('cb-date').value;
+            const notes = document.getElementById('cb-notes').value.trim();
+            if (!name || !email || !phone) {
+                btn.textContent = 'Fill in name, email & phone';
+                btn.style.background = '#8B2020';
+                setTimeout(() => { btn.textContent = 'Confirm Order →'; btn.style.background = ''; }, 2400);
+                return;
+            }
+            const entries = Object.entries(cart);
+            const lines = entries.map(([n, { price, qty }]) => qty + '× ' + n + ' — ₱' + (price * qty).toLocaleString());
+            const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            lines.push('─────────────');
+            lines.push('Total: ₱' + total.toLocaleString());
+            if (notes) lines.push('Notes: ' + notes);
+            const message = lines.join('\n');
             btn.textContent = 'Sending…';
             btn.disabled = true;
-            const body = new URLSearchParams({ name: form['name'].value, email: form['email'].value, phone: form['phone'].value, date: form['date'].value, message: form['message'].value });
+            const body = new URLSearchParams({ name, email, phone, date, message });
             try {
                 await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body });
-                showFormState(btn, 'Order sent!', '#2D6A2D');
-                setTimeout(() => { resetFormState(btn, form); }, 3200);
+                btn.textContent = '✓ Order sent!';
+                btn.style.background = '#2D6A2D';
+                setTimeout(() => {
+                    clearCart();
+                    closeCartForm();
+                    ['cb-name','cb-email','cb-phone','cb-date','cb-notes'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+                    btn.textContent = 'Confirm Order →';
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 2800);
             } catch {
-                showFormState(btn, 'Something went wrong — try again', '#8B2020');
-                setTimeout(() => { resetFormState(btn, form, true); }, 3200);
+                btn.textContent = 'Something went wrong — try again';
+                btn.style.background = '#8B2020';
+                setTimeout(() => { btn.textContent = 'Confirm Order →'; btn.style.background = ''; btn.disabled = false; }, 3000);
             }
         }
-
-        function showFormState(btn, label, bg) { btn.textContent = label; btn.style.background = bg; }
-        function resetFormState(btn, form, keepData = false) { btn.textContent = 'Send order'; btn.style.background = ''; btn.disabled = false; if (!keepData) form.reset(); }
-
-        document.getElementById('submitBtn').addEventListener('click', function(e) {
-            const btn = document.getElementById('submitBtn');
-            if (btn.disabled) return;
-            e.preventDefault();
-            handleFormSubmit({ preventDefault: () => {}, target: document.getElementById('orderForm') });
-        });
 
         /* ============================================================
            CHOPSTICKS CURSOR
