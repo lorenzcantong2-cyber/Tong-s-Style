@@ -735,6 +735,193 @@
             .cart-bar.active { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
             .cart-bar-send { padding: 12px 18px; min-height: 44px; }
         }
+
+        /* ============================================================
+           DELIVERY / PICK-UP CARDS (hero banner addition)
+        ============================================================ */
+        .sisig-banner {
+            display: grid;
+            grid-template-columns: 280px 1fr auto;
+            min-height: 220px;
+            overflow: hidden;
+            margin-top: var(--nav-h);
+        }
+
+        .hero-cards-group {
+            display: flex;
+            align-items: flex-end;
+            gap: 16px;
+            padding: 20px 20px 20px 0;
+            background: var(--black);
+        }
+
+        /* Featured item card */
+        .hero-featured-card {
+            background: var(--white);
+            border-left: 4px solid var(--saffron);
+            padding: 18px 20px 42px;
+            position: relative;
+            width: 220px;
+            flex-shrink: 0;
+            border-radius: 2px;
+        }
+
+        .hero-featured-name {
+            font-family: var(--font-cond);
+            font-weight: 900;
+            font-size: 1.1rem;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .hero-featured-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--saffron);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .hero-featured-desc {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 300;
+            line-height: 1.5;
+        }
+
+        .hero-price-badge {
+            position: absolute;
+            bottom: -16px;
+            right: 16px;
+            width: 90px;
+            height: 90px;
+            background: var(--black);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+            border: 3px solid var(--black);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+        }
+
+        .hero-price-badge .starts-at {
+            font-family: var(--font-cond);
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.1;
+        }
+
+        .hero-price-badge .price-amount {
+            font-family: var(--font-cond);
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--saffron);
+            line-height: 1;
+        }
+
+        /* Delivery / Pick-Up image cards */
+        .hero-action-cards {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .hero-action-card {
+            width: 180px;
+            height: 200px;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.45);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .hero-action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 28px 56px rgba(0,0,0,0.6);
+        }
+
+        .hero-action-card-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #2a2a2a;
+            transition: transform 0.35s ease;
+        }
+
+        .hero-action-card:hover .hero-action-card-bg {
+            transform: scale(1.04);
+        }
+
+        /* Fallback color when no image */
+        .hero-action-card.delivery-card { background: #3a2f1e; }
+        .hero-action-card.pickup-card   { background: #1e2a3a; }
+
+        .hero-action-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.97);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero-action-label span {
+            font-family: var(--font-cond);
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 0.03em;
+            color: var(--navy);
+        }
+
+        .hero-action-label .arrow {
+            font-size: 1.1rem;
+            color: var(--navy);
+            transition: transform 0.25s ease;
+            font-weight: 900;
+        }
+
+        .hero-action-card:hover .arrow { transform: translateX(4px); }
+
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .hero-action-card { width: 150px; height: 170px; }
+            .hero-featured-card { width: 190px; }
+        }
+
+        @media (max-width: 860px) {
+            .sisig-banner {
+                grid-template-columns: 1fr;
+            }
+            .hero-cards-group {
+                padding: 20px 16px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-featured-card { width: 100%; max-width: 320px; }
+            .hero-action-card { width: 160px; height: 160px; }
+        }
+
+        @media (max-width: 540px) {
+            .hero-featured-card { padding-bottom: 50px; }
+            .hero-action-card { width: 140px; height: 140px; }
+        }
     </style>
 </head>
 <body>
@@ -775,6 +962,40 @@
             <hr class="sisig-banner-rule">
             <h2 class="sisig-banner-title">No gatekeeping.<br><em>Prepped Fresh</em><br>and ready to roll.</h2>
             <a href="#order" class="sisig-banner-cta">Order now &rarr;</a>
+        </div>
+
+        <!-- DELIVERY + PICK-UP CARDS GROUP -->
+        <div class="hero-cards-group">
+
+            <!-- Featured item card -->
+            <div class="hero-featured-card">
+                <span class="hero-featured-tag">★ Best Seller</span>
+                <p class="hero-featured-name">Tong's Classic Sisig</p>
+                <p class="hero-featured-desc">Our sizzling sisig prepped fresh,<br>served with rice &amp; egg.</p>
+                <div class="hero-price-badge">
+                    <span class="starts-at">STARTS AT</span>
+                    <span class="price-amount">₱199</span>
+                </div>
+            </div>
+
+            <!-- Action cards -->
+            <div class="hero-action-cards">
+                <a href="#order" class="hero-action-card delivery-card" aria-label="Order for delivery">
+                    <img class="hero-action-card-bg" src="Food/delivery.jpg" alt="Delivery" onerror="this.style.display='none'">
+                    <div class="hero-action-label">
+                        <span>Delivery</span>
+                        <span class="arrow">&#8594;</span>
+                    </div>
+                </a>
+                <a href="#order" class="hero-action-card pickup-card" aria-label="Order for pick-up">
+                    <img class="hero-action-card-bg" src="Food/pickup.jpg" alt="Pick-Up" onerror="this.style.display='none'">
+                    <div class="hero-action-label">
+                        <span>Pick-Up</span>
+                        <span class="arrow">&#8594;</span>
+                    </div>
+                </a>
+            </div>
+
         </div>
     </section>
 
