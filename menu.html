@@ -6,7 +6,7 @@
     <title>Menu — TONG'S STYLE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
     <style>
         /* ============================================================
            TOKENS
@@ -14,6 +14,8 @@
         :root {
             --white:        #FAFAF9;
             --black:        #161614;
+            --navy:         #030817;
+            --gold:         #F5B638;
             --saffron:      #EEC724;
             --saffron-pale: #FDF8DC;
             --surface:      #F2F0EB;
@@ -21,60 +23,36 @@
             --border:       #DDD9CF;
             --font-display: 'Syne', sans-serif;
             --font-body:    'DM Sans', sans-serif;
+            --font-cond:    'Barlow Condensed', sans-serif;
+            --nav-h:        60px;
         }
 
         /* ============================================================
            RESET
         ============================================================ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-        html {
-            font-size: 16px;
-            scroll-behavior: smooth;
-            scroll-padding-top: 72px;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--white);
-            color: var(--black);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-        }
-
+        html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+        body { font-family: var(--font-body); background: var(--white); color: var(--black); line-height: 1.6; -webkit-font-smoothing: antialiased; }
         img { display: block; max-width: 100%; }
         a { color: inherit; text-decoration: none; }
         button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
-
-        :focus-visible {
-            outline: 2px solid var(--saffron);
-            outline-offset: 3px;
-            border-radius: 2px;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
+        :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+        @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; } }
 
         /* ============================================================
            NAVIGATION
         ============================================================ */
         .nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 100;
-            padding: 14px 48px;
+            height: var(--nav-h);
+            padding: 0 48px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: var(--white);
             box-shadow: 0 1px 0 var(--border);
-            transition: padding 0.3s ease;
         }
 
         .nav-logo {
@@ -114,237 +92,316 @@
         .nav-cta:hover { opacity: 0.82; }
 
         /* ============================================================
-           PAGE HEADER
+           HAMBURGER / MOBILE NAV
         ============================================================ */
-        .page-header {
-            padding: 120px 48px 60px;
-            border-bottom: 1px solid var(--border);
+        .nav-hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            padding: 8px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            z-index: 151;
+            min-width: 44px;
+            min-height: 44px;
+            align-items: center;
         }
+        .nav-hamburger span { width: 22px; height: 2px; background: var(--black); display: block; border-radius: 1px; transition: transform 0.28s ease, opacity 0.2s ease; }
+        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-        .page-header-inner {
-            max-width: 1280px;
-            margin: 0 auto;
+        .nav-mobile-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--white);
+            z-index: 150;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.28s ease, visibility 0.28s ease;
         }
+        .nav-mobile-overlay.open { opacity: 1; visibility: visible; pointer-events: all; }
+        .nav-mobile-overlay a { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--black); letter-spacing: -0.02em; padding: 12px 24px; min-height: 56px; display: flex; align-items: center; transition: color 0.15s; }
+        .nav-mobile-overlay a:active { color: var(--muted); }
+        .nav-mobile-overlay .nav-cta { margin-top: 20px; background: var(--saffron); color: var(--black) !important; padding: 16px 40px; border-radius: 2px; font-size: 1rem; font-family: var(--font-body); font-weight: 500; letter-spacing: 0; min-height: 52px; }
 
-        .page-label {
-            font-size: 0.78rem;
-            color: var(--muted);
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-
-        .page-title {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: clamp(2.8rem, 7vw, 6rem);
-            line-height: 0.92;
-            letter-spacing: -0.03em;
+        /* ============================================================
+           MENU WRAPPER
+        ============================================================ */
+        .menu-wrap {
+            padding-top: var(--nav-h);
         }
 
         /* ============================================================
-           MENU
+           CHECKERBOARD BACKGROUND
         ============================================================ */
-        .menu {
-            padding: 80px 48px 100px;
-            max-width: 1280px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            margin-bottom: 56px;
-        }
-
-        .section-label {
-            font-size: 0.78rem;
-            color: var(--muted);
-            font-weight: 400;
-            margin-bottom: 10px;
-        }
-
-        .section-title {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: clamp(2.2rem, 5vw, 4rem);
-            line-height: 0.95;
-            letter-spacing: -0.025em;
-        }
-
-        .menu-grid {
+        .menu-layout {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: var(--border);
+            grid-template-columns: 230px 1fr 320px;
+            min-height: calc(100vh - var(--nav-h));
+            background-color: #F9F8F5;
+            background-image:
+                linear-gradient(45deg, #E8E5DF 25%, transparent 25%),
+                linear-gradient(-45deg, #E8E5DF 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #E8E5DF 75%),
+                linear-gradient(-45deg, transparent 75%, #E8E5DF 75%);
+            background-size: 36px 36px;
+            background-position: 0 0, 0 18px, 18px -18px, -18px 0px;
         }
 
-        .menu-item {
-            background: var(--white);
-            overflow: hidden;
-            transition: background 0.2s;
+        /* ============================================================
+           LEFT SIDEBAR
+        ============================================================ */
+        .sidebar {
+            background: rgba(249,248,245,0.82);
+            backdrop-filter: blur(4px);
+            padding: 32px 14px 40px;
+            position: sticky;
+            top: var(--nav-h);
+            height: calc(100vh - var(--nav-h));
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+            border-right: 1px solid rgba(0,0,0,0.07);
         }
 
-        .menu-item:hover { background: var(--surface); }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
-        .menu-cart-ctrl { margin-top: 16px; }
+        .sidebar-heading {
+            font-family: var(--font-cond);
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 14px;
+            padding: 0 6px;
+        }
 
-        .btn-add-cart {
+        .cat-btn {
             display: block;
             width: 100%;
-            padding: 11px 20px;
-            background: var(--saffron);
-            color: var(--black);
-            font-family: var(--font-body);
-            font-size: 0.82rem;
-            font-weight: 500;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            letter-spacing: 0.02em;
-            transition: opacity 0.2s;
-            border-radius: 2px;
-        }
-        .btn-add-cart:hover { opacity: 0.82; }
-
-        .qty-controls {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            background: var(--saffron);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-        .menu-cart-ctrl.has-item .btn-add-cart { display: none; }
-        .menu-cart-ctrl.has-item .qty-controls  { display: flex; }
-
-        .qty-btn {
-            width: 42px;
-            height: 40px;
-            background: none;
-            border: none;
-            font-size: 1.25rem;
-            font-weight: 300;
-            cursor: pointer;
-            color: var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.15s;
-        }
-        .qty-btn:hover { background: rgba(0,0,0,0.1); }
-
-        .qty-num {
-            font-family: var(--font-display);
+            padding: 11px 14px;
+            margin-bottom: 4px;
+            background: var(--navy);
+            color: #fff;
+            font-family: var(--font-cond);
             font-size: 0.95rem;
             font-weight: 700;
-            color: var(--black);
-            min-width: 24px;
-            text-align: center;
-        }
-
-        .menu-img-wrap { overflow: hidden; }
-
-        .menu-img {
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
-            display: block;
-            filter: saturate(0.85);
-            transition: filter 0.35s, transform 0.45s cubic-bezier(0.2, 0, 0.3, 1);
-        }
-
-        .menu-item:hover .menu-img {
-            filter: saturate(1);
-            transform: scale(1.04);
-        }
-
-        .menu-item-body {
-            padding: 20px 20px 22px;
-        }
-
-        .menu-item-name {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1.05rem;
-            margin-bottom: 6px;
-        }
-
-        .menu-item-desc {
-            font-size: 0.85rem;
-            color: var(--muted);
-            font-weight: 300;
-            line-height: 1.55;
-            margin-bottom: 14px;
-        }
-
-        .menu-item-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .menu-item-price {
-            font-family: var(--font-display);
-            font-weight: 700;
-            font-size: 1rem;
-        }
-
-        .menu-item-badge {
-            font-size: 0.72rem;
-            font-weight: 400;
-            padding: 3px 8px;
-            background: var(--saffron-pale);
-            border-radius: 2px;
-        }
-
-        /* ---- Floating cart bar ---- */
-        .cart-bar {
-            position: fixed;
-            bottom: -90px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--black);
-            color: var(--white);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-            padding: 14px 16px 14px 22px;
-            border-radius: 4px;
-            min-width: 300px;
-            max-width: 480px;
-            width: calc(100% - 48px);
-            z-index: 300;
-            transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
-        }
-        .cart-bar.active { bottom: 24px; }
-
-        .cart-bar-info { display: flex; flex-direction: column; gap: 1px; }
-
-        .cart-bar-count {
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.55);
-            font-weight: 400;
-        }
-        .cart-bar-total {
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            font-weight: 700;
-        }
-
-        .cart-bar-send {
-            background: var(--saffron);
-            color: var(--black);
-            font-family: var(--font-body);
-            font-size: 0.875rem;
-            font-weight: 500;
-            padding: 10px 20px;
+            letter-spacing: 0.03em;
+            text-align: left;
             border: none;
-            border-radius: 2px;
+            cursor: pointer;
+            transition: background 0.18s, color 0.18s;
+            line-height: 1.3;
+        }
+
+        .cat-btn:hover { background: var(--gold); color: var(--navy); }
+        .cat-btn.active { background: var(--gold); color: var(--navy); }
+
+        /* ============================================================
+           SECTION DIVIDER (tilted label over line)
+        ============================================================ */
+        .section-divider-wrap {
+            position: relative;
+            margin: 32px 28px 8px;
+        }
+
+        .divider-line { height: 2px; background: var(--navy); }
+
+        .divider-label {
+            position: absolute;
+            top: -13px;
+            left: 16px;
+            background: var(--navy);
+            color: #fff;
+            font-family: var(--font-cond);
+            font-size: 0.88rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            padding: 5px 14px;
+            transform: rotate(-1.8deg);
+            white-space: nowrap;
+            z-index: 2;
+        }
+
+        /* ============================================================
+           CENTER SECTION — PRODUCT LIST
+        ============================================================ */
+        .center-section {
+            background: transparent;
+            min-height: 100%;
+        }
+
+        .product-list {
+            padding: 8px 28px 48px;
+        }
+
+        .product-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.07);
+            cursor: pointer;
+            transition: background 0.15s;
+            position: relative;
+        }
+
+        .product-row:last-child { border-bottom: none; }
+        .product-row:hover { background: rgba(245, 182, 56, 0.1); }
+        .product-row.active { background: rgba(245, 182, 56, 0.18); }
+
+        .product-row-img-wrap {
+            width: 96px;
+            height: 72px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .product-row-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s cubic-bezier(0.2,0,0.3,1);
+        }
+
+        .product-row:hover .product-row-img { transform: scale(1.06); }
+
+        .product-row-info { flex: 1; min-width: 0; }
+
+        .product-row-name {
+            font-family: var(--font-cond);
+            font-weight: 800;
+            font-size: 1.08rem;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 3px;
+        }
+
+        .product-row-price {
+            font-family: var(--font-cond);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .btn-order-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: var(--font-cond);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 9px 13px;
+            border: none;
             cursor: pointer;
             white-space: nowrap;
-            transition: opacity 0.2s;
+            flex-shrink: 0;
+            transition: opacity 0.2s, transform 0.15s;
         }
-        .cart-bar-send:hover { opacity: 0.85; }
+
+        .btn-order-row:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn-order-row svg { width: 13px; height: 13px; }
+
+        /* ============================================================
+           RIGHT SECTION — FEATURED PROMO
+        ============================================================ */
+        .featured-section {
+            background: rgba(249,248,245,0.75);
+            border-left: 2px dashed var(--navy);
+            min-height: 100%;
+        }
+
+        .featured-inner {
+            padding: 8px 22px 40px;
+        }
+
+        .featured-name {
+            font-family: var(--font-cond);
+            font-weight: 900;
+            font-size: 2rem;
+            color: var(--navy);
+            line-height: 1.08;
+            margin-bottom: 6px;
+            margin-top: 20px;
+            letter-spacing: -0.01em;
+        }
+
+        .featured-price {
+            font-family: var(--font-cond);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 18px;
+        }
+
+        .btn-order-featured {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--gold);
+            color: var(--navy);
+            font-family: var(--font-cond);
+            font-size: 0.95rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 12px 22px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: opacity 0.2s, transform 0.15s;
+        }
+
+        .btn-order-featured:hover { opacity: 0.85; transform: translateY(-1px); }
+        .btn-order-featured svg { width: 16px; height: 16px; }
+
+        .featured-img-wrap {
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .featured-img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s cubic-bezier(0.2,0,0.3,1);
+        }
+
+        .featured-img-wrap:hover .featured-img { transform: scale(1.03); }
+
+        .featured-desc {
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            font-weight: 300;
+            color: var(--navy);
+            line-height: 1.65;
+            margin-bottom: 8px;
+        }
+
+        .featured-note {
+            font-family: var(--font-body);
+            font-size: 0.78rem;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--muted);
+        }
 
         /* ============================================================
            ORDER FORM
@@ -355,31 +412,16 @@
             margin: 0 auto;
         }
 
-        .order-form {
-            display: grid;
-            gap: 44px;
-        }
+        .section-header { margin-bottom: 56px; }
+        .section-label { font-size: 0.78rem; color: var(--muted); font-weight: 400; margin-bottom: 10px; }
+        .section-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.2rem, 5vw, 4rem); line-height: 0.95; letter-spacing: -0.025em; }
 
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 36px;
-        }
+        .order-form { display: grid; gap: 44px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-label { font-size: 0.78rem; color: var(--muted); font-weight: 400; }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-label {
-            font-size: 0.78rem;
-            color: var(--muted);
-            font-weight: 400;
-        }
-
-        .form-input,
-        .form-textarea {
+        .form-input, .form-textarea {
             font-family: var(--font-body);
             font-size: 0.975rem;
             font-weight: 300;
@@ -393,21 +435,9 @@
             width: 100%;
         }
 
-        .form-input:focus,
-        .form-textarea:focus {
-            border-color: var(--black);
-        }
-
-        .form-input::placeholder,
-        .form-textarea::placeholder {
-            color: var(--border);
-        }
-
-        .form-textarea {
-            resize: none;
-            min-height: 96px;
-            line-height: 1.6;
-        }
+        .form-input:focus, .form-textarea:focus { border-color: var(--black); }
+        .form-input::placeholder, .form-textarea::placeholder { color: var(--border); }
+        .form-textarea { resize: none; min-height: 96px; line-height: 1.6; }
 
         .form-submit {
             align-self: flex-start;
@@ -429,193 +459,49 @@
         /* ============================================================
            FOOTER
         ============================================================ */
-        .footer {
-            background: var(--black);
-            padding: 64px 48px 44px;
-        }
-
-        .footer-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 48px;
-        }
-
-        .footer-brand-name {
-            font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: var(--white);
-            letter-spacing: -0.025em;
-        }
-
-        .footer-brand-tag {
-            font-size: 0.82rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.35);
-            margin-top: 8px;
-        }
-
-        .footer-links {
-            list-style: none;
-            display: flex;
-            gap: 36px;
-        }
-
-        .footer-links a {
-            color: rgba(255,255,255,0.35);
-            font-size: 0.875rem;
-            font-weight: 300;
-            transition: color 0.2s;
-        }
-
+        .footer { background: var(--black); padding: 64px 48px 44px; }
+        .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: flex-start; gap: 48px; }
+        .footer-brand-name { font-family: var(--font-display); font-weight: 800; font-size: 1.5rem; color: var(--white); letter-spacing: -0.025em; }
+        .footer-brand-tag { font-size: 0.82rem; font-weight: 300; color: rgba(255,255,255,0.35); margin-top: 8px; }
+        .footer-links { list-style: none; display: flex; gap: 36px; }
+        .footer-links a { color: rgba(255,255,255,0.35); font-size: 0.875rem; font-weight: 300; transition: color 0.2s; }
         .footer-links a:hover { color: var(--white); }
-
-        .footer-bottom {
-            max-width: 1280px;
-            margin: 36px auto 0;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.07);
-            font-size: 0.78rem;
-            color: rgba(255,255,255,0.22);
-            font-weight: 300;
-        }
+        .footer-bottom { max-width: 1280px; margin: 36px auto 0; padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.07); font-size: 0.78rem; color: rgba(255,255,255,0.22); font-weight: 300; }
 
         /* ============================================================
-           HAMBURGER / MOBILE NAV
+           FLOATING CART BAR
         ============================================================ */
-        .nav-hamburger {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            padding: 8px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            z-index: 151;
-            min-width: 44px;
-            min-height: 44px;
-            align-items: center;
-        }
-        .nav-hamburger span {
-            width: 22px;
-            height: 2px;
-            background: var(--black);
-            display: block;
-            border-radius: 1px;
-            transition: transform 0.28s ease, opacity 0.2s ease;
-        }
-
-        .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-        .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-        .nav-mobile-overlay {
+        .cart-bar {
             position: fixed;
-            inset: 0;
-            background: var(--white);
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.28s ease, visibility 0.28s ease;
-        }
-        .nav-mobile-overlay.open {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: all;
-        }
-        .nav-mobile-overlay a {
-            font-family: var(--font-display);
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--black);
-            letter-spacing: -0.02em;
-            padding: 12px 24px;
-            min-height: 56px;
+            bottom: -90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--black);
+            color: var(--white);
             display: flex;
             align-items: center;
-            transition: color 0.15s;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 14px 16px 14px 22px;
+            border-radius: 4px;
+            min-width: 300px;
+            max-width: 480px;
+            width: calc(100% - 48px);
+            z-index: 300;
+            transition: bottom 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.28);
         }
-        .nav-mobile-overlay a:active { color: var(--muted); }
-        .nav-mobile-overlay .nav-cta {
-            margin-top: 20px;
-            background: var(--saffron);
-            color: var(--black) !important;
-            padding: 16px 40px;
-            border-radius: 2px;
-            font-size: 1rem;
-            font-family: var(--font-body);
-            font-weight: 500;
-            letter-spacing: 0;
-            min-height: 52px;
-        }
+        .cart-bar.active { bottom: 24px; }
+        .cart-bar-info { display: flex; flex-direction: column; gap: 1px; }
+        .cart-bar-count { font-size: 0.75rem; color: rgba(255,255,255,0.55); font-weight: 400; }
+        .cart-bar-total { font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+        .cart-bar-send { background: var(--saffron); color: var(--black); font-family: var(--font-body); font-size: 0.875rem; font-weight: 500; padding: 10px 20px; border: none; border-radius: 2px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+        .cart-bar-send:hover { opacity: 0.85; }
 
-        /* ============================================================
-           RESPONSIVE
-        ============================================================ */
-        @media (max-width: 960px) {
-            .menu-grid { grid-template-columns: repeat(2, 1fr); }
-            html { scroll-padding-top: 60px; }
-        }
-
-        @media (max-width: 680px) {
-            html { scroll-padding-top: 56px; }
-
-            .nav { padding: 11px 20px; }
-            .nav-links { display: none !important; }
-            .nav-hamburger { display: flex; }
-
-            .page-header { padding: 90px 20px 40px; }
-
-            .menu { padding: 48px 16px 60px; }
-            .section-header { margin-bottom: 36px; }
-            .menu-grid { grid-template-columns: 1fr; }
-            .btn-add-cart { min-height: 48px; font-size: 0.9rem; }
-            .qty-btn { width: 52px; height: 48px; font-size: 1.4rem; }
-
-            .order-section { padding: 60px 20px; }
-            .form-row { grid-template-columns: 1fr; gap: 32px; }
-            .form-input, .form-textarea { font-size: 1rem; padding: 12px 0; }
-            .form-textarea { min-height: 110px; }
-            .form-submit {
-                width: 100%;
-                text-align: center;
-                align-self: stretch;
-                padding: 18px;
-                font-size: 1rem;
-            }
-
-            .footer { padding: 48px 20px 36px; }
-            .footer-inner { flex-direction: column; gap: 28px; }
-            .footer-links { gap: 20px; flex-wrap: wrap; }
-
-            .cart-bar {
-                width: calc(100% - 32px);
-                border-radius: 10px;
-                bottom: calc(-100px - env(safe-area-inset-bottom, 0px));
-                padding: 14px 16px;
-                padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-            }
-            .cart-bar.active {
-                bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-            }
-            .cart-bar-send { padding: 12px 18px; min-height: 44px; }
-        }
         /* ============================================================
            FRYING PAN CURSOR
         ============================================================ */
-        @media (pointer: fine) {
-            * { cursor: none !important; }
-        }
+        @media (pointer: fine) { * { cursor: none !important; } }
 
         .custom-cursor {
             position: fixed;
@@ -624,21 +510,16 @@
             font-size: 42px;
             line-height: 1;
             user-select: none;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             transform: translate(-50%, -50%) rotate(0deg);
             transition: transform 0.1s cubic-bezier(0.2, 0, 0.3, 1);
             will-change: transform, top, left;
             display: none;
         }
 
-        @media (pointer: fine) {
-            .custom-cursor { display: block; }
-        }
+        @media (pointer: fine) { .custom-cursor { display: block; } }
 
-        .custom-cursor.swing {
-            transform: translate(-50%, -50%) rotate(-40deg) scale(1.2);
-        }
+        .custom-cursor.swing { transform: translate(-50%, -50%) rotate(-40deg) scale(1.2); }
 
         @keyframes btnHit {
             0%   { transform: scale(1)    translateY(0px);  }
@@ -648,14 +529,77 @@
             100% { transform: scale(1)    translateY(0px);  }
         }
 
-        .btn-hit {
-            animation: btnHit 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
+        .btn-hit { animation: btnHit 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important; }
+
+        /* ============================================================
+           RESPONSIVE
+        ============================================================ */
+        @media (max-width: 1100px) {
+            .menu-layout { grid-template-columns: 200px 1fr 280px; }
+            .featured-name { font-size: 1.6rem; }
+        }
+
+        @media (max-width: 860px) {
+            .menu-layout { grid-template-columns: 1fr; }
+            .sidebar {
+                position: static;
+                height: auto;
+                overflow-x: auto;
+                overflow-y: visible;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                gap: 6px;
+                padding: 14px 16px;
+                border-right: none;
+                border-bottom: 2px solid var(--navy);
+                scrollbar-width: none;
+            }
+            .sidebar::-webkit-scrollbar { display: none; }
+            .sidebar-heading { display: none; }
+            .cat-btn {
+                display: inline-block;
+                width: auto;
+                white-space: nowrap;
+                margin-bottom: 0;
+                padding: 9px 14px;
+                font-size: 0.88rem;
+                flex-shrink: 0;
+            }
+            .center-section { border-top: none; }
+            .featured-section {
+                border-left: none;
+                border-top: 2px dashed var(--navy);
+            }
+        }
+
+        @media (max-width: 680px) {
+            .nav { padding: 0 20px; }
+            .nav-links { display: none !important; }
+            .nav-hamburger { display: flex; }
+
+            .product-row-img-wrap { width: 72px; height: 56px; }
+            .btn-order-row { padding: 8px 10px; font-size: 0.75rem; }
+
+            .order-section { padding: 60px 20px; }
+            .form-row { grid-template-columns: 1fr; gap: 32px; }
+            .form-input, .form-textarea { font-size: 1rem; padding: 12px 0; }
+            .form-textarea { min-height: 110px; }
+            .form-submit { width: 100%; text-align: center; align-self: stretch; padding: 18px; font-size: 1rem; }
+
+            .footer { padding: 48px 20px 36px; }
+            .footer-inner { flex-direction: column; gap: 28px; }
+            .footer-links { gap: 20px; flex-wrap: wrap; }
+
+            .cart-bar { width: calc(100% - 32px); border-radius: 10px; bottom: calc(-100px - env(safe-area-inset-bottom, 0px)); padding: 14px 16px; padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+            .cart-bar.active { bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+            .cart-bar-send { padding: 12px 18px; min-height: 44px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- FRYING PAN CURSOR -->
+    <!-- CHOPSTICKS CURSOR -->
     <div class="custom-cursor" id="customCursor" aria-hidden="true">🥢</div>
 
     <!-- NAVIGATION -->
@@ -678,164 +622,50 @@
         <a href="#order" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
     </div>
 
-    <!-- PAGE HEADER -->
-    <header class="page-header">
-        <div class="page-header-inner">
-            <p class="page-label">What we make</p>
-            <h1 class="page-title">The menu.</h1>
-        </div>
-    </header>
+    <!-- ======================================================
+         THREE-COLUMN MENU LAYOUT
+    ====================================================== -->
+    <div class="menu-wrap">
+        <div class="menu-layout" id="menu">
 
-    <!-- MENU -->
-    <section class="menu" id="menu" aria-label="Menu">
-        <div class="menu-grid">
+            <!-- LEFT SIDEBAR -->
+            <aside class="sidebar" aria-label="Menu categories">
+                <div class="sidebar-heading">Must Try</div>
+                <button class="cat-btn active" data-cat="promos"     onclick="selectCategory(this)">Promos</button>
+                <button class="cat-btn"        data-cat="fajita"     onclick="selectCategory(this)">Buy 2, Get 1 Chicken Fajita Wraps</button>
+                <button class="cat-btn"        data-cat="sisig"      onclick="selectCategory(this)">Sisig</button>
+                <button class="cat-btn"        data-cat="poppers"    onclick="selectCategory(this)">Flavored Chicken Poppers</button>
+                <button class="cat-btn"        data-cat="hainanese"  onclick="selectCategory(this)">Chicken Hainanese</button>
+                <button class="cat-btn"        data-cat="padkrapao"  onclick="selectCategory(this)">Pad Kra Pao</button>
+                <button class="cat-btn"        data-cat="siomai"     onclick="selectCategory(this)">Siomai</button>
+                <button class="cat-btn"        data-cat="chicken"    onclick="selectCategory(this)">Chicken</button>
+                <button class="cat-btn"        data-cat="addons"     onclick="selectCategory(this)">Add Ons</button>
+            </aside>
 
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="Food/sisig.jpg?v=2"
-                         alt="Classic Sisig Combo" loading="lazy">
+            <!-- CENTER: EXPLORE PROMOS -->
+            <section class="center-section" aria-label="Product list">
+                <div class="section-divider-wrap">
+                    <div class="divider-line"></div>
+                    <div class="divider-label" id="centerLabel">EXPLORE PROMOS</div>
                 </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">Classic Sisig Combo</h3>
-                    <p class="menu-item-desc">Sizzling pork sisig, egg on top, garlic rice, chicharon crumble, and your drink of choice.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;180</span>
-                        <span class="menu-item-badge">Bestseller</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-sisig-combo">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('Classic Sisig Combo', 180, 'ctrl-sisig-combo')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, -1, 'ctrl-sisig-combo')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('Classic Sisig Combo', 180, 1, 'ctrl-sisig-combo')">+</button>
-                        </div>
-                    </div>
+                <div class="product-list" id="productList">
+                    <!-- dynamically rendered -->
                 </div>
-            </article>
+            </section>
 
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&h=450&q=80"
-                         alt="TONG's Burger Combo" loading="lazy">
+            <!-- RIGHT: FEATURED PROMO -->
+            <section class="featured-section" aria-label="Featured product">
+                <div class="section-divider-wrap">
+                    <div class="divider-line"></div>
+                    <div class="divider-label">FEATURED PROMO</div>
                 </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">TONG's Burger Combo</h3>
-                    <p class="menu-item-desc">Double smash patty, special sauce, coleslaw, house pickles. Fries and a drink included.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;225</span>
-                        <span class="menu-item-badge">Staff pick</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-burger-combo">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('TONG\'s Burger Combo', 225, 'ctrl-burger-combo')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, -1, 'ctrl-burger-combo')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('TONG\'s Burger Combo', 225, 1, 'ctrl-burger-combo')">+</button>
-                        </div>
-                    </div>
+                <div class="featured-inner" id="featuredContent">
+                    <!-- dynamically rendered -->
                 </div>
-            </article>
-
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80"
-                         alt="The OG Wapr" loading="lazy">
-                </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">The OG Wapr</h3>
-                    <p class="menu-item-desc">Waffle wrap stuffed with sisig or burger, cheese sauce, pickled veg, and house aioli.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;130</span>
-                        <span class="menu-item-badge">New</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-og-wapr">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('The OG Wapr', 130, 'ctrl-og-wapr')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, -1, 'ctrl-og-wapr')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('The OG Wapr', 130, 1, 'ctrl-og-wapr')">+</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&h=450&q=80"
-                         alt="Sisig Rice Bowl" loading="lazy">
-                </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">Sisig Rice Bowl</h3>
-                    <p class="menu-item-desc">Sisig over garlic fried rice, sunny-side egg, crispy chicharon, drizzle of spiced vinegar.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;90</span>
-                        <span class="menu-item-badge">Solo</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-rice-bowl">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('Sisig Rice Bowl', 90, 'ctrl-rice-bowl')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, -1, 'ctrl-rice-bowl')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('Sisig Rice Bowl', 90, 1, 'ctrl-rice-bowl')">+</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?auto=format&fit=crop&w=600&h=450&q=80"
-                         alt="Barkada Platter" loading="lazy">
-                </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">Barkada Platter</h3>
-                    <p class="menu-item-desc">Full sisig platter, 4 mini burgers, 4 waprs, 4 drinks. Everyone eats. No one complains.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;680</span>
-                        <span class="menu-item-badge">Feeds 4–5</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-barkada">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('Barkada Platter', 680, 'ctrl-barkada')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, -1, 'ctrl-barkada')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('Barkada Platter', 680, 1, 'ctrl-barkada')">+</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
-
-            <article class="menu-item">
-                <div class="menu-img-wrap">
-                    <img class="menu-img"
-                         src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=600&h=450&q=80"
-                         alt="Sweet Wapr" loading="lazy">
-                </div>
-                <div class="menu-item-body">
-                    <h3 class="menu-item-name">Sweet Wapr</h3>
-                    <p class="menu-item-desc">Dessert waffle wrap with Nutella, fresh banana, crushed graham, and a dusting of sugar.</p>
-                    <div class="menu-item-footer">
-                        <span class="menu-item-price">&#x20B1;85</span>
-                        <span class="menu-item-badge">Dessert</span>
-                    </div>
-                    <div class="menu-cart-ctrl" id="ctrl-sweet-wapr">
-                        <button class="btn-add-cart" type="button" onclick="addToCart('Sweet Wapr', 85, 'ctrl-sweet-wapr')">+ Add to cart</button>
-                        <div class="qty-controls">
-                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, -1, 'ctrl-sweet-wapr')">−</button>
-                            <span class="qty-num">1</span>
-                            <button class="qty-btn" type="button" onclick="changeQty('Sweet Wapr', 85, 1, 'ctrl-sweet-wapr')">+</button>
-                        </div>
-                    </div>
-                </div>
-            </article>
+            </section>
 
         </div>
-    </section>
+    </div>
 
     <!-- ORDER FORM -->
     <section class="order-section" id="order" aria-label="Place an order">
@@ -885,9 +715,7 @@
                 <li><a href="mailto:hello@tongsstyle.ph">Contact</a></li>
             </ul>
         </div>
-        <div class="footer-bottom">
-            &copy; 2024 TONG'S STYLE. All rights reserved.
-        </div>
+        <div class="footer-bottom">&copy; 2024 TONG'S STYLE. All rights reserved.</div>
     </footer>
 
     <!-- FLOATING CART BAR -->
@@ -900,6 +728,331 @@
     </div>
 
     <script>
+        /* ============================================================
+           MENU DATA
+        ============================================================ */
+        const PRODUCTS = {
+            promos: [
+                {
+                    id: 'sisig-platter',
+                    name: 'Sisig Platter®',
+                    price: 950,
+                    image: 'Food/sisig.jpg?v=2',
+                    description: 'Our bestselling Sisig comes with 1 flavored Chicken poppers and 1.5L Coke.',
+                    note: 'Additional condiments subject to request or a fee.'
+                },
+                {
+                    id: 'fajita-b1g1',
+                    name: 'Buy 1 Get 1 Chicken Fajitas®',
+                    price: 150,
+                    image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Two Chicken Fajita Wraps for the price of one — grilled strips, peppers, onions, house aioli.',
+                    note: 'One per customer. Valid while supplies last.'
+                },
+                {
+                    id: 'trio-poppers',
+                    name: 'Trio Flavored Poppers',
+                    price: 500,
+                    image: 'https://images.unsplash.com/photo-1562967915-6ba607ff7d05?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Three flavors of crispy chicken poppers: Classic, Spicy, and Honey Garlic.',
+                    note: 'Dipping sauces included.'
+                },
+                {
+                    id: 'sisig-burger-promo',
+                    name: 'Sisig Burger Combo',
+                    price: 99,
+                    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Smash burger with sisig-spiced patty, egg, and house sauce. Served with garlic rice.',
+                    note: 'Limited daily slots only.'
+                }
+            ],
+            fajita: [
+                {
+                    id: 'fajita-wrap',
+                    name: 'Chicken Fajita Wrap',
+                    price: 150,
+                    image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Grilled chicken strips, roasted peppers and onions, shredded cheese in a soft flour tortilla.',
+                    note: 'Buy 2, Get 1 Free promo ongoing.'
+                },
+                {
+                    id: 'fajita-spicy',
+                    name: 'Spicy Chicken Fajita Wrap',
+                    price: 165,
+                    image: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Extra heat. Chili-marinated grilled chicken, jalapeño, pepper jack, house hot sauce.',
+                    note: 'Spice level adjustable on request.'
+                }
+            ],
+            sisig: [
+                {
+                    id: 'classic-sisig',
+                    name: 'Classic Sisig Combo',
+                    price: 180,
+                    image: 'Food/sisig.jpg?v=2',
+                    description: 'Sizzling pork sisig, egg on top, garlic rice, chicharon crumble, and your drink of choice.',
+                    note: 'Ask for extra calamansi.'
+                },
+                {
+                    id: 'sisig-bowl',
+                    name: 'Sisig Rice Bowl',
+                    price: 90,
+                    image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Sisig over garlic fried rice, sunny-side egg, crispy chicharon, drizzle of spiced vinegar.',
+                    note: ''
+                },
+                {
+                    id: 'sisig-platter2',
+                    name: 'Sisig Platter',
+                    price: 950,
+                    image: 'Food/sisig.jpg?v=2',
+                    description: 'Full sizzling platter — perfect for sharing. Comes with rice and 1.5L Coke.',
+                    note: 'Good for 3–4 pax.'
+                }
+            ],
+            poppers: [
+                {
+                    id: 'poppers-classic',
+                    name: 'Classic Chicken Poppers',
+                    price: 120,
+                    image: 'https://images.unsplash.com/photo-1562967915-6ba607ff7d05?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Crispy bite-sized chicken poppers seasoned with our signature house blend.',
+                    note: 'Comes with ranch dip.'
+                },
+                {
+                    id: 'poppers-spicy',
+                    name: 'Spicy Chicken Poppers',
+                    price: 130,
+                    image: 'https://images.unsplash.com/photo-1562967915-6ba607ff7d05?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Extra heat, same crunch. Ghost pepper seasoning for the brave.',
+                    note: '🌶 Not for the faint of heart.'
+                },
+                {
+                    id: 'poppers-honey',
+                    name: 'Honey Garlic Poppers',
+                    price: 135,
+                    image: 'https://images.unsplash.com/photo-1562967915-6ba607ff7d05?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Sticky honey garlic glaze on perfectly crispy poppers.',
+                    note: ''
+                }
+            ],
+            hainanese: [
+                {
+                    id: 'hainanese-rice',
+                    name: 'Chicken Hainanese Rice',
+                    price: 160,
+                    image: 'https://images.unsplash.com/photo-1563379091339-03246963d35b?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Tender poached Hainanese-style chicken on fragrant pandan rice with ginger and sesame sauce.',
+                    note: 'Dark soy served on the side.'
+                }
+            ],
+            padkrapao: [
+                {
+                    id: 'pad-kra-pao',
+                    name: 'Pad Kra Pao',
+                    price: 175,
+                    image: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Thai-style stir-fried chicken with holy basil, fresh chili, fish sauce, over jasmine rice.',
+                    note: 'Spice level adjustable. Topped with fried egg.'
+                }
+            ],
+            siomai: [
+                {
+                    id: 'siomai-6pc',
+                    name: 'Siomai 6 pcs',
+                    price: 75,
+                    image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Steamed pork siomai with soy-calamansi dipping sauce and chili oil.',
+                    note: ''
+                },
+                {
+                    id: 'siomai-12pc',
+                    name: 'Siomai 12 pcs',
+                    price: 140,
+                    image: 'https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Double order. Best shared — or not.',
+                    note: ''
+                }
+            ],
+            chicken: [
+                {
+                    id: 'fried-chicken',
+                    name: 'Crispy Fried Chicken',
+                    price: 145,
+                    image: 'https://images.unsplash.com/photo-1562967915-6ba607ff7d05?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Golden crispy fried chicken, served with garlic rice and achara on the side.',
+                    note: ''
+                },
+                {
+                    id: 'grilled-chicken',
+                    name: 'Grilled Chicken Plate',
+                    price: 155,
+                    image: 'https://images.unsplash.com/photo-1563379091339-03246963d35b?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Juicy charcoal-grilled chicken thigh with garlic rice, pickled atchara, and house sauce.',
+                    note: ''
+                }
+            ],
+            addons: [
+                {
+                    id: 'extra-rice',
+                    name: 'Extra Rice',
+                    price: 20,
+                    image: 'https://images.unsplash.com/photo-1536304993881-ff86e0c9b6d9?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Extra serving of garlic fried rice.',
+                    note: ''
+                },
+                {
+                    id: 'coke-15l',
+                    name: 'Coke 1.5L',
+                    price: 80,
+                    image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Coke 1.5L bottle — good for sharing.',
+                    note: ''
+                },
+                {
+                    id: 'chicharon',
+                    name: 'Extra Chicharon',
+                    price: 30,
+                    image: 'https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=600&h=450&q=80',
+                    description: 'Crispy chicharon crumble — the perfect sisig topping.',
+                    note: ''
+                }
+            ]
+        };
+
+        const CATEGORY_LABELS = {
+            promos: 'EXPLORE PROMOS',
+            fajita: 'FAJITA WRAPS',
+            sisig: 'SISIG',
+            poppers: 'CHICKEN POPPERS',
+            hainanese: 'CHICKEN HAINANESE',
+            padkrapao: 'PAD KRA PAO',
+            siomai: 'SIOMAI',
+            chicken: 'CHICKEN',
+            addons: 'ADD ONS'
+        };
+
+        const CART_ICON = `<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>`;
+
+        let currentCategory = 'promos';
+        let activeProductId = null;
+
+        /* ============================================================
+           RENDER PRODUCT LIST
+        ============================================================ */
+        function renderProducts(cat) {
+            const list = document.getElementById('productList');
+            const items = PRODUCTS[cat] || [];
+            list.innerHTML = items.map((p, i) => `
+                <div class="product-row${i === 0 ? ' active' : ''}"
+                     onclick="selectProduct('${p.id}', '${cat}')"
+                     data-id="${p.id}">
+                    <div class="product-row-img-wrap">
+                        <img class="product-row-img" src="${p.image}" alt="${p.name}" loading="lazy">
+                    </div>
+                    <div class="product-row-info">
+                        <div class="product-row-name">${p.name}</div>
+                        <div class="product-row-price">&#x20B1;${p.price.toFixed(2)}</div>
+                    </div>
+                    <button class="btn-order-row"
+                            onclick="event.stopPropagation(); cartAdd('${p.id}', '${cat}')"
+                            aria-label="Order ${p.name}">
+                        ${CART_ICON} ORDER NOW
+                    </button>
+                </div>
+            `).join('');
+
+            document.getElementById('centerLabel').textContent = CATEGORY_LABELS[cat] || 'EXPLORE';
+
+            if (items.length) renderFeatured(items[0]);
+            activeProductId = items[0]?.id || null;
+        }
+
+        /* ============================================================
+           RENDER FEATURED PANEL
+        ============================================================ */
+        function renderFeatured(product) {
+            const container = document.getElementById('featuredContent');
+            container.innerHTML = `
+                <div class="featured-name">${product.name}</div>
+                <div class="featured-price">Total Price: &#x20B1;${product.price.toFixed(2)}</div>
+                <button class="btn-order-featured" onclick="cartAdd('${product.id}', '${currentCategory}')">
+                    ${CART_ICON} ORDER NOW
+                </button>
+                <div class="featured-img-wrap">
+                    <img class="featured-img" src="${product.image}" alt="${product.name}" loading="lazy">
+                </div>
+                ${product.description ? `<p class="featured-desc">${product.description}</p>` : ''}
+                ${product.note ? `<p class="featured-note">${product.note}</p>` : ''}
+            `;
+        }
+
+        /* ============================================================
+           CATEGORY SWITCH
+        ============================================================ */
+        function selectCategory(btn) {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.dataset.cat;
+            renderProducts(currentCategory);
+        }
+
+        /* ============================================================
+           PRODUCT ROW CLICK → UPDATE FEATURED
+        ============================================================ */
+        function selectProduct(id, cat) {
+            const product = (PRODUCTS[cat] || []).find(p => p.id === id);
+            if (!product) return;
+
+            document.querySelectorAll('.product-row').forEach(row => {
+                row.classList.toggle('active', row.dataset.id === id);
+            });
+
+            activeProductId = id;
+            renderFeatured(product);
+        }
+
+        /* ============================================================
+           CART
+        ============================================================ */
+        const cart = {};
+
+        function cartAdd(id, cat) {
+            const product = (PRODUCTS[cat] || []).find(p => p.id === id);
+            if (!product) return;
+
+            if (cart[product.name]) {
+                cart[product.name].qty += 1;
+            } else {
+                cart[product.name] = { price: product.price, qty: 1 };
+            }
+            renderCartBar();
+        }
+
+        function renderCartBar() {
+            const entries = Object.entries(cart);
+            const totalQty   = entries.reduce((s, [, v]) => s + v.qty, 0);
+            const totalPrice = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            const bar = document.getElementById('cartBar');
+            if (totalQty === 0) { bar.classList.remove('active'); return; }
+            bar.classList.add('active');
+            document.getElementById('cartCount').textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
+            document.getElementById('cartTotal').textContent = '₱' + totalPrice.toLocaleString();
+        }
+
+        function sendCartOrder() {
+            const entries = Object.entries(cart);
+            if (!entries.length) return;
+            const lines = entries.map(([name, { price, qty }]) => qty + '× ' + name + ' — ₱' + (price * qty).toLocaleString());
+            const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
+            lines.push('─────────────');
+            lines.push('Total: ₱' + total.toLocaleString());
+            const msg = document.getElementById('f-message');
+            if (msg) msg.value = lines.join('\n');
+            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+            setTimeout(() => { const f = document.getElementById('f-name'); if (f && !f.value) f.focus(); }, 600);
+        }
+
         /* ============================================================
            MOBILE NAV
         ============================================================ */
@@ -920,61 +1073,6 @@
         }
 
         /* ============================================================
-           CART
-        ============================================================ */
-        const cart = {};
-
-        function addToCart(name, price, ctrlId) {
-            cart[name] = { price, qty: 1, ctrlId };
-            const ctrl = document.getElementById(ctrlId);
-            ctrl.classList.add('has-item');
-            ctrl.querySelector('.qty-num').textContent = 1;
-            renderCartBar();
-        }
-
-        function changeQty(name, price, delta, ctrlId) {
-            if (!cart[name]) return;
-            cart[name].qty += delta;
-            const ctrl = document.getElementById(ctrlId);
-            if (cart[name].qty <= 0) {
-                delete cart[name];
-                ctrl.classList.remove('has-item');
-            } else {
-                ctrl.querySelector('.qty-num').textContent = cart[name].qty;
-            }
-            renderCartBar();
-        }
-
-        function renderCartBar() {
-            const entries = Object.entries(cart);
-            const totalQty   = entries.reduce((s, [, v]) => s + v.qty, 0);
-            const totalPrice = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
-            const bar = document.getElementById('cartBar');
-            if (totalQty === 0) { bar.classList.remove('active'); return; }
-            bar.classList.add('active');
-            document.getElementById('cartCount').textContent = totalQty + (totalQty === 1 ? ' item' : ' items');
-            document.getElementById('cartTotal').textContent = '₱' + totalPrice;
-        }
-
-        function sendCartOrder() {
-            const entries = Object.entries(cart);
-            if (!entries.length) return;
-            const lines = entries.map(([name, { price, qty }]) =>
-                qty + '× ' + name + ' — ₱' + (price * qty)
-            );
-            const total = entries.reduce((s, [, v]) => s + v.price * v.qty, 0);
-            lines.push('─────────────');
-            lines.push('Total: ₱' + total);
-            const msg = document.getElementById('f-message');
-            if (msg) msg.value = lines.join('\n');
-            document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-            setTimeout(() => {
-                const f = document.getElementById('f-name');
-                if (f && !f.value) f.focus();
-            }, 600);
-        }
-
-        /* ============================================================
            GOOGLE SHEETS INTEGRATION
         ============================================================ */
         const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyVrJEd4SYVHIVuoagsJO1bh-8hs68ZeEWP3iFMzKQST4NLtRHBe5v2YdTUYRPeCYHY/exec';
@@ -983,18 +1081,9 @@
             e.preventDefault();
             const form = e.target;
             const btn  = document.getElementById('submitBtn');
-
             btn.textContent = 'Sending…';
             btn.disabled = true;
-
-            const body = new URLSearchParams({
-                name:    form['name'].value,
-                email:   form['email'].value,
-                phone:   form['phone'].value,
-                date:    form['date'].value,
-                message: form['message'].value
-            });
-
+            const body = new URLSearchParams({ name: form['name'].value, email: form['email'].value, phone: form['phone'].value, date: form['date'].value, message: form['message'].value });
             try {
                 await fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', body });
                 showFormState(btn, 'Order sent!', '#2D6A2D');
@@ -1005,17 +1094,8 @@
             }
         }
 
-        function showFormState(btn, label, bg) {
-            btn.textContent = label;
-            btn.style.background = bg;
-        }
-
-        function resetFormState(btn, form, keepData = false) {
-            btn.textContent = 'Send order';
-            btn.style.background = '';
-            btn.disabled = false;
-            if (!keepData) form.reset();
-        }
+        function showFormState(btn, label, bg) { btn.textContent = label; btn.style.background = bg; }
+        function resetFormState(btn, form, keepData = false) { btn.textContent = 'Send order'; btn.style.background = ''; btn.disabled = false; if (!keepData) form.reset(); }
 
         document.getElementById('submitBtn').addEventListener('click', function(e) {
             const btn = document.getElementById('submitBtn');
@@ -1025,19 +1105,13 @@
         });
 
         /* ============================================================
-           FRYING PAN CURSOR
+           CHOPSTICKS CURSOR
         ============================================================ */
         (function () {
             const cursor = document.getElementById('customCursor');
-
-            document.addEventListener('mousemove', e => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top  = e.clientY + 'px';
-            }, { passive: true });
-
+            document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; }, { passive: true });
             document.addEventListener('mousedown', () => cursor.classList.add('swing'));
             document.addEventListener('mouseup',   () => cursor.classList.remove('swing'));
-
             document.addEventListener('click', e => {
                 const btn = e.target.closest('button, a, [role="button"]');
                 if (!btn) return;
@@ -1047,6 +1121,11 @@
                 btn.addEventListener('animationend', () => btn.classList.remove('btn-hit'), { once: true });
             });
         })();
+
+        /* ============================================================
+           INIT
+        ============================================================ */
+        renderProducts('promos');
     </script>
 
 </body>
