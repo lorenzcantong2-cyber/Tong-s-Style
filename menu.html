@@ -32,7 +32,7 @@
         ============================================================ */
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 16px; scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
-        body { font-family: var(--font-body); background: var(--white); color: var(--black); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+        body { font-family: var(--font-body); background: #E8D9AE; color: var(--black); line-height: 1.6; -webkit-font-smoothing: antialiased; }
         img { display: block; max-width: 100%; }
         a { color: inherit; text-decoration: none; }
         button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
@@ -51,8 +51,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--white);
-            box-shadow: 0 1px 0 var(--border);
+            background: #F5EDD5;
+            box-shadow: 0 1px 0 #D6C48A;
         }
 
         .nav-logo {
@@ -141,28 +141,47 @@
         }
 
         /* ============================================================
-           CHECKERBOARD BACKGROUND
+           1900s RETRO RESTAURANT BACKGROUND
         ============================================================ */
         .menu-layout {
             display: grid;
             grid-template-columns: 230px 1fr 320px;
             min-height: calc(100vh - var(--nav-h));
-            background-color: #F9F8F5;
+            /* Aged parchment base */
+            background-color: #F2E5C0;
             background-image:
-                linear-gradient(45deg, #E8E5DF 25%, transparent 25%),
-                linear-gradient(-45deg, #E8E5DF 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #E8E5DF 75%),
-                linear-gradient(-45deg, transparent 75%, #E8E5DF 75%);
-            background-size: 36px 36px;
-            background-position: 0 0, 0 18px, 18px -18px, -18px 0px;
+                /* Bright center — worn paper lit from above */
+                radial-gradient(ellipse 90% 60% at 50% 0%, rgba(255, 250, 225, 0.55) 0%, transparent 70%),
+                /* Corner vignette — aged, worn edges */
+                radial-gradient(ellipse 100% 100% at 50% 50%, transparent 50%, rgba(85, 50, 12, 0.22) 100%),
+                /* Victorian diamond lattice — primary */
+                repeating-linear-gradient(
+                    45deg,
+                    transparent 0px, transparent 27px,
+                    rgba(125, 78, 20, 0.15) 27px, rgba(125, 78, 20, 0.15) 28.5px
+                ),
+                repeating-linear-gradient(
+                    -45deg,
+                    transparent 0px, transparent 27px,
+                    rgba(125, 78, 20, 0.15) 27px, rgba(125, 78, 20, 0.15) 28.5px
+                ),
+                /* Fine horizontal grain — old wallpaper texture */
+                repeating-linear-gradient(
+                    0deg,
+                    transparent 0px, transparent 7px,
+                    rgba(125, 78, 20, 0.03) 7px, rgba(125, 78, 20, 0.03) 8px
+                );
+            background-size: 100% 400px, 100% 100%, 40px 40px, 40px 40px, 100% 8px;
+            background-position: top center, center, 0 0, 0 0, 0 0;
+            background-attachment: local, local, fixed, fixed, fixed;
         }
 
         /* ============================================================
            LEFT SIDEBAR
         ============================================================ */
         .sidebar {
-            background: rgba(249,248,245,0.82);
-            backdrop-filter: blur(4px);
+            background: rgba(218, 192, 130, 0.72);
+            backdrop-filter: blur(6px);
             padding: 32px 14px 40px;
             position: sticky;
             top: var(--nav-h);
@@ -234,6 +253,16 @@
             white-space: nowrap;
             z-index: 2;
         }
+
+        .divider-label::before,
+        .divider-label::after {
+            content: '\25C6';
+            font-size: 0.55em;
+            opacity: 0.65;
+            vertical-align: middle;
+        }
+        .divider-label::before { margin-right: 7px; }
+        .divider-label::after  { margin-left:  7px; }
 
         /* ============================================================
            CENTER SECTION — PRODUCT LIST
@@ -322,7 +351,7 @@
            RIGHT SECTION — FEATURED PROMO
         ============================================================ */
         .featured-section {
-            background: rgba(249,248,245,0.75);
+            background: rgba(226, 200, 138, 0.70);
             border-left: 2px dashed var(--navy);
             min-height: 100%;
         }
