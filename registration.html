@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in or sign up — TONG'S STYLE</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+
+    <!-- Capture email-link results before Supabase reads and clears the URL -->
+    <script>window.__authHash = location.hash; window.__authSearch = location.search;</script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.min.js"
+            integrity="sha384-D3HBLJnDxXL59BXo26GFWjGTcyxip2IVM0I+EqfCMwOhTc5jUTZxISDtfdXFaUOm"
+            crossorigin="anonymous"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="auth-ui.js"></script>
+</head>
+<body>
+
+<div class="auth-shell">
+
+    <!-- PHOTO PANEL -->
+    <aside class="auth-visual" aria-label="TONG'S STYLE">
+        <a href="index.html" class="auth-brand">TONG'S STYLE</a>
+        <div>
+            <h2 class="auth-visual-title">Your usual, one tap away.</h2>
+            <p class="auth-visual-copy">Save your details once and check out faster every time the sisig calls.</p>
+        </div>
+    </aside>
+
+    <!-- FORMS -->
+    <main class="auth-main">
+        <div class="auth-topline">
+            <a href="index.html" class="auth-back">Back to TONG'S STYLE</a>
+        </div>
+
+        <div class="auth-panel">
+
+            <!-- Shown while we check for an existing session / email-link result -->
+            <div class="auth-checking" id="authChecking" role="status">
+                <span class="spinner" aria-hidden="true"></span> Checking your session…
+            </div>
+
+            <div id="authContent" hidden>
+
+                <div class="auth-switch" id="authSwitch" role="tablist" aria-label="Log in or sign up" data-active="login">
+                    <span class="auth-switch-pill" aria-hidden="true"></span>
+                    <button type="button" class="auth-switch-btn" role="tab" id="tab-login"  aria-controls="view-login"  aria-selected="true"  data-view="login">Log in</button>
+                    <button type="button" class="auth-switch-btn" role="tab" id="tab-signup" aria-controls="view-signup" aria-selected="false" data-view="signup" tabindex="-1">Sign up</button>
+                </div>
+
+                <div class="auth-banner" id="pageBanner" hidden></div>
+
+                <!-- ===================== LOG IN ===================== -->
+                <section class="auth-view" id="view-login" role="tabpanel" aria-labelledby="tab-login">
+                    <h1 class="auth-title">Welcome back</h1>
+                    <p class="auth-sub">Log in to see your account and order faster.</p>
+
+                    <div class="auth-banner" id="loginBanner" hidden></div>
+
+                    <form class="auth-form" id="loginForm" novalidate>
+                        <div class="field">
+                            <label for="login-email">Email address</label>
+                            <input type="email" id="login-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="login-email-err">
+                            <p class="field-error" id="login-email-err"></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="login-password">Password</label>
+                            <div class="password-wrap">
+                                <input type="password" id="login-password" name="password" autocomplete="current-password" required aria-describedby="login-password-err">
+                                <button type="button" class="password-toggle" data-toggle-for="login-password" aria-pressed="false" aria-label="Show password">Show</button>
+                            </div>
+                            <p class="field-error" id="login-password-err"></p>
+                        </div>
+
+                        <div class="auth-options">
+                            <label class="check">
+                                <input type="checkbox" id="login-remember" checked>
+                                Remember me
+                            </label>
+                            <a href="#forgot" class="text-link" data-goto="forgot">Forgot password?</a>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark btn-block" id="loginSubmit">
+                            <span class="spinner" aria-hidden="true"></span>
+                            <span class="btn-label">Log in</span>
+                        </button>
+                    </form>
+
+                    <p class="auth-alt">New here? <button type="button" class="text-link" data-goto="signup">Create an account</button></p>
+                </section>
+
+                <!-- ===================== SIGN UP ===================== -->
+                <section class="auth-view" id="view-signup" role="tabpanel" aria-labelledby="tab-signup">
+                    <h1 class="auth-title">Create your account</h1>
+                    <p class="auth-sub">It takes a minute. We’ll email you a link to confirm it’s you.</p>
+
+                    <div class="auth-banner" id="signupBanner" hidden></div>
+
+                    <form class="auth-form" id="signupForm" novalidate>
+                        <div class="field-row">
+                            <div class="field">
+                                <label for="su-first">First name</label>
+                                <input type="text" id="su-first" name="first_name" autocomplete="given-name" maxlength="50" required aria-describedby="su-first-err">
+                                <p class="field-error" id="su-first-err"></p>
+                            </div>
+                            <div class="field">
+                                <label for="su-last">Last name</label>
+                                <input type="text" id="su-last" name="last_name" autocomplete="family-name" maxlength="50" required aria-describedby="su-last-err">
+                                <p class="field-error" id="su-last-err"></p>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label for="su-email">Email address</label>
+                            <input type="email" id="su-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="su-email-err">
+                            <p class="field-error" id="su-email-err"></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="su-mobile">Mobile number</label>
+                            <input type="tel" id="su-mobile" name="mobile" autocomplete="tel-national" inputmode="numeric" maxlength="11" placeholder="09171234567" required aria-describedby="su-mobile-hint su-mobile-err">
+                            <p class="field-hint" id="su-mobile-hint">11 digits, starting with 09</p>
+                            <p class="field-error" id="su-mobile-err"></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="su-password">Password</label>
+                            <div class="password-wrap">
+                                <input type="password" id="su-password" name="password" autocomplete="new-password" maxlength="12" required aria-describedby="su-password-rules su-password-err">
+                                <button type="button" class="password-toggle" data-toggle-for="su-password" aria-pressed="false" aria-label="Show password">Show</button>
+                            </div>
+                            <ul class="pw-rules" id="su-password-rules" aria-label="Password requirements"></ul>
+                            <p class="field-error" id="su-password-err"></p>
+                        </div>
+
+                        <div class="field">
+                            <label for="su-confirm">Confirm password</label>
+                            <div class="password-wrap">
+                                <input type="password" id="su-confirm" name="confirm" autocomplete="new-password" maxlength="12" required aria-describedby="su-confirm-err">
+                                <button type="button" class="password-toggle" data-toggle-for="su-confirm" aria-pressed="false" aria-label="Show password">Show</button>
+                            </div>
+                            <p class="field-error" id="su-confirm-err"></p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block" id="signupSubmit">
+                            <span class="spinner" aria-hidden="true"></span>
+                            <span class="btn-label">Create account</span>
+                        </button>
+                    </form>
+
+                    <p class="auth-alt">Already have an account? <button type="button" class="text-link" data-goto="login">Log in</button></p>
+                </section>
+
+                <!-- ===================== FORGOT PASSWORD ===================== -->
+                <section class="auth-view" id="view-forgot" aria-labelledby="forgot-title">
+                    <h1 class="auth-title" id="forgot-title">Reset your password</h1>
+                    <p class="auth-sub">Enter the email you signed up with and we’ll send you a link to set a new password.</p>
+
+                    <div class="auth-banner" id="forgotBanner" hidden></div>
+
+                    <form class="auth-form" id="forgotForm" novalidate>
+                        <div class="field">
+                            <label for="fp-email">Email address</label>
+                            <input type="email" id="fp-email" name="email" autocomplete="email" inputmode="email" required aria-describedby="fp-email-err">
+                            <p class="field-error" id="fp-email-err"></p>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark btn-block" id="forgotSubmit">
+                            <span class="spinner" aria-hidden="true"></span>
+                            <span class="btn-label">Send reset link</span>
+                        </button>
+                    </form>
+
+                    <p class="auth-alt"><button type="button" class="text-link" data-goto="login">Back to log in</button></p>
+                </section>
+
+                <!-- ===================== CHECK YOUR EMAIL (after sign up) ===================== -->
+                <section class="auth-view" id="view-sent" aria-labelledby="sent-title">
+                    <div class="auth-confirm-mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+                    </div>
+                    <h1 class="auth-title" id="sent-title">Check your email</h1>
+                    <p class="auth-sub">We sent a verification link to <strong id="sentEmail"></strong>. Open it to activate your account, then log in.</p>
+
+                    <div class="auth-banner" id="sentBanner" hidden></div>
+
+                    <div class="auth-actions">
+                        <button type="button" class="btn btn-dark btn-block" data-goto="login">Go to log in</button>
+                        <button type="button" class="btn btn-ghost btn-block" id="resendSignup">
+                            <span class="spinner" aria-hidden="true"></span>
+                            <span class="btn-label">Resend verification email</span>
+                        </button>
+                    </div>
+                    <p class="auth-fineprint">Can’t find it? Check your spam or promotions folder. The link expires after 24 hours.</p>
+                </section>
+
+                <!-- ===================== EMAIL VERIFIED ===================== -->
+                <section class="auth-view" id="view-verified" aria-labelledby="verified-title">
+                    <div class="auth-confirm-mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+                    </div>
+                    <h1 class="auth-title" id="verified-title">Email verified</h1>
+                    <p class="auth-sub">Your account is active and you’re logged in.</p>
+                    <div class="auth-actions">
+                        <a href="dashboard.html" class="btn btn-primary btn-block">Go to my account</a>
+                        <a href="menu.html" class="btn btn-ghost btn-block">Browse the menu</a>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+(function () {
+    'use strict';
+    const A  = window.TSAuth;
+    const UI = window.TSAuthUI;
+    if (!A || !UI) {
+        document.getElementById('authChecking').textContent = 'Couldn’t load the login system. Check your connection and refresh the page.';
+        return;
+    }
+    const sb = A.client;
+
+    const params     = new URLSearchParams(window.__authSearch || '');
+    const hashParams = UI.parseHash(window.__authHash);
+    const next       = A.safeNext(params.get('next'));
+
+    const views      = ['login', 'signup', 'forgot', 'sent', 'verified'];
+    const order      = { login: 0, signup: 1, forgot: 2, sent: 3, verified: 3 };
+    const switchEl   = document.getElementById('authSwitch');
+    const pageBanner = document.getElementById('pageBanner');
+    let current      = null;
+
+    /* ============================================================
+       VIEW SWITCHING
+    ============================================================ */
+    function showView(name, opts) {
+        opts = opts || {};
+        if (!views.includes(name)) name = 'login';
+        const prev = current;
+        current = name;
+
+        views.forEach(v => {
+            const el = document.getElementById('view-' + v);
+            el.classList.remove('active', 'from-left');
+            if (v === name) {
+                if (prev && order[name] < order[prev]) el.classList.add('from-left');
+                el.classList.add('active');
+            }
+        });
+
+        const isTab = name === 'login' || name === 'signup';
+        switchEl.hidden = !isTab;
+        if (isTab) {
+            switchEl.dataset.active = name;
+            switchEl.querySelectorAll('.auth-switch-btn').forEach(b => {
+                const on = b.dataset.view === name;
+                b.setAttribute('aria-selected', String(on));
+                b.tabIndex = on ? 0 : -1;
+            });
+        }
+
+        if (!opts.keepPageBanner) UI.hideBanner(pageBanner);
+
+        if (opts.updateHash !== false && (name === 'login' || name === 'signup' || name === 'forgot')) {
+            history.replaceState(null, '', '#' + name);
+        }
+
+        if (opts.focus !== false && prev) {
+            const first = document.querySelector('#view-' + name + ' input, #view-' + name + ' .btn');
+            if (first) first.focus({ preventScroll: true });
+        }
+    }
+
+    document.addEventListener('click', e => {
+        const t = e.target.closest('[data-goto]');
+        if (!t) return;
+        e.preventDefault();
+        showView(t.dataset.goto);
+    });
+
+    switchEl.addEventListener('click', e => {
+        const b = e.target.closest('.auth-switch-btn');
+        if (b) showView(b.dataset.view);
+    });
+
+    // Arrow keys move between the two tabs
+    switchEl.addEventListener('keydown', e => {
+        if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+        const target = current === 'login' ? 'signup' : 'login';
+        showView(target, { focus: false });
+        document.getElementById('tab-' + target).focus();
+    });
+
+    UI.bindPasswordToggles(document);
+
+    /* ============================================================
+       LOG IN
+    ============================================================ */
+    const loginForm   = document.getElementById('loginForm');
+    const loginBanner = document.getElementById('loginBanner');
+    const loginBtn    = document.getElementById('loginSubmit');
+    const li = {
+        email:    document.getElementById('login-email'),
+        password: document.getElementById('login-password'),
+        remember: document.getElementById('login-remember')
+    };
+    const loginFields = [
+        { input: li.email,    binding: UI.bindField(li.email,    A.validate.email) },
+        { input: li.password, binding: UI.bindField(li.password, A.validate.loginPassword) }
+    ];
+
+    loginForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        UI.hideBanner(loginBanner);
+        if (!UI.validateAll(loginFields)) return;
+
+        const email = li.email.value.trim().toLowerCase();
+        UI.setLoading(loginBtn, true, 'Logging in…');
+        A.setRemembered(li.remember.checked);
+
+        const { error } = await sb.auth.signInWithPassword({ email, password: li.password.value });
+
+        if (error) {
+            UI.setLoading(loginBtn, false);
+            const notConfirmed = error.code === 'email_not_confirmed' || /not confirmed/i.test(error.message || '');
+            UI.showBanner(loginBanner, 'error', A.friendlyError(error), notConfirmed ? {
+                label: 'Resend verification email',
+                onClick: btn => resendVerification(email, loginBanner, btn)
+            } : null);
+            if (!notConfirmed) {
+                li.password.value = '';
+                li.password.focus();
+            }
+            return;
+        }
+
+        UI.setLoading(loginBtn, true, 'Logged in — redirecting…');
+        window.location.replace(next);
+    });
+
+    /* ============================================================
+       SIGN UP
+    ============================================================ */
+    const signupForm   = document.getElementById('signupForm');
+    const signupBanner = document.getElementById('signupBanner');
+    const signupBtn    = document.getElementById('signupSubmit');
+    const su = {
+        first:    document.getElementById('su-first'),
+        last:     document.getElementById('su-last'),
+        email:    document.getElementById('su-email'),
+        mobile:   document.getElementById('su-mobile'),
+        password: document.getElementById('su-password'),
+        confirm:  document.getElementById('su-confirm')
+    };
+
+    // Mobile field: digits only as they type
+    su.mobile.addEventListener('input', () => {
+        const digits = su.mobile.value.replace(/\D/g, '').slice(0, 11);
+        if (digits !== su.mobile.value) su.mobile.value = digits;
+    });
+
+    const signupFields = [
+        { input: su.first,    binding: UI.bindField(su.first,    v => A.validate.name(v, 'first name')) },
+        { input: su.last,     binding: UI.bindField(su.last,     v => A.validate.name(v, 'last name')) },
+        { input: su.email,    binding: UI.bindField(su.email,    A.validate.email) },
+        { input: su.mobile,   binding: UI.bindField(su.mobile,   A.validate.mobile) },
+        { input: su.password, binding: UI.bindField(su.password, A.validate.password) },
+        { input: su.confirm,  binding: UI.bindField(su.confirm,  v => A.validate.confirm(v, su.password.value)) }
+    ];
+
+    UI.bindPasswordRules(document.getElementById('su-password-rules'), su.password);
+
+    // Re-check "confirm" when the password changes
+    su.password.addEventListener('input', () => {
+        if (su.confirm.value) UI.setFieldError(su.confirm, A.validate.confirm(su.confirm.value, su.password.value));
+    });
+
+    let lastSignupEmail = '';
+
+    signupForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        UI.hideBanner(signupBanner);
+        if (!UI.validateAll(signupFields)) return;
+
+        const email = su.email.value.trim().toLowerCase();
+        UI.setLoading(signupBtn, true, 'Creating account…');
+
+        const { data, error } = await sb.auth.signUp({
+            email,
+            password: su.password.value,
+            options: {
+                emailRedirectTo: A.pageUrl(A.PAGES.login, { verified: '1' }),
+                data: {
+                    first_name: su.first.value.trim(),
+                    last_name:  su.last.value.trim(),
+                    mobile:     su.mobile.value.trim()
+                }
+            }
+        });
+
+        UI.setLoading(signupBtn, false);
+
+        if (error) {
+            const msg = A.friendlyError(error);
+            if (/already exists/.test(msg)) UI.setFieldError(su.email, msg);
+            UI.showBanner(signupBanner, 'error', msg);
+            return;
+        }
+
+        // Supabase hides existing accounts: a confirmed email comes back with no identities
+        if (data.user && Array.isArray(data.user.identities) && data.user.identities.length === 0) {
+            const msg = 'An account with this email already exists. Log in instead, or reset your password.';
+            UI.setFieldError(su.email, msg);
+            UI.showBanner(signupBanner, 'error', msg, {
+                label: 'Go to log in',
+                onClick: () => { li.email.value = email; showView('login'); }
+            });
+            su.email.focus();
+            return;
+        }
+
+        // Email confirmation turned off in Supabase → already signed in
+        if (data.session) {
+            window.location.replace(A.PAGES.dashboard);
+            return;
+        }
+
+        lastSignupEmail = email;
+        document.getElementById('sentEmail').textContent = email;
+        signupForm.reset();
+        signupFields.forEach(f => f.binding.reset());
+        su.password.dispatchEvent(new Event('input'));
+        li.email.value = email;
+        showView('sent');
+    });
+
+    async function resendVerification(email, bannerEl, btn) {
+        if (btn) btn.disabled = true;
+        const { error } = await sb.auth.resend({
+            type: 'signup',
+            email,
+            options: { emailRedirectTo: A.pageUrl(A.PAGES.login, { verified: '1' }) }
+        });
+        if (error) {
+            UI.showBanner(bannerEl, 'error', A.friendlyError(error));
+        } else {
+            UI.showBanner(bannerEl, 'success', 'Verification email sent to ' + email + '. Check your inbox.');
+        }
+        if (btn) btn.disabled = false;
+    }
+
+    const resendBtn = document.getElementById('resendSignup');
+    resendBtn.addEventListener('click', async () => {
+        if (!lastSignupEmail) return;
+        UI.setLoading(resendBtn, true, 'Sending…');
+        await resendVerification(lastSignupEmail, document.getElementById('sentBanner'));
+        UI.setLoading(resendBtn, false);
+    });
+
+    /* ============================================================
+       FORGOT PASSWORD
+    ============================================================ */
+    const forgotForm   = document.getElementById('forgotForm');
+    const forgotBanner = document.getElementById('forgotBanner');
+    const forgotBtn    = document.getElementById('forgotSubmit');
+    const fpEmail      = document.getElementById('fp-email');
+    const forgotFields = [{ input: fpEmail, binding: UI.bindField(fpEmail, A.validate.email) }];
+
+    forgotForm.addEventListener('submit', async e => {
+        e.preventDefault();
+        UI.hideBanner(forgotBanner);
+        if (!UI.validateAll(forgotFields)) return;
+
+        const email = fpEmail.value.trim().toLowerCase();
+        UI.setLoading(forgotBtn, true, 'Sending…');
+        const { error } = await sb.auth.resetPasswordForEmail(email, {
+            redirectTo: A.pageUrl(A.PAGES.reset)
+        });
+        UI.setLoading(forgotBtn, false);
+
+        if (error) {
+            UI.showBanner(forgotBanner, 'error', A.friendlyError(error));
+            return;
+        }
+        // Same message whether or not the account exists, so emails can't be probed
+        UI.showBanner(forgotBanner, 'success',
+            'If an account exists for ' + email + ', a reset link is on its way. It expires in 1 hour.');
+    });
+
+    // Carry the typed email over when switching to "forgot"
+    document.querySelectorAll('[data-goto="forgot"]').forEach(el =>
+        el.addEventListener('click', () => { if (li.email.value && !fpEmail.value) fpEmail.value = li.email.value.trim(); }));
+
+    /* ============================================================
+       START: handle email-link results, existing sessions, deep links
+    ============================================================ */
+    async function start() {
+        // Awaiting getSession also lets Supabase finish reading tokens from the email link
+        const session = await A.getSession();
+
+        document.getElementById('authChecking').hidden = true;
+        document.getElementById('authContent').hidden = false;
+
+        // 1. Email link came back with an error (expired, already used, invalid)
+        if (hashParams.error || hashParams.error_description) {
+            const expired = hashParams.error_code === 'otp_expired' || /expired|invalid/i.test(hashParams.error_description || '');
+            showView('login', { updateHash: true, focus: false });
+            UI.showBanner(pageBanner, 'error', expired
+                ? 'That email link has expired or was already used. Log in — if your email still isn’t verified, we’ll let you resend the link.'
+                : 'We couldn’t verify that link: ' + (hashParams.error_description || 'unknown error') + '.',
+                null);
+            return;
+        }
+
+        // 2. Arrived from the verification email and Supabase signed them in
+        if (session && (hashParams.type === 'signup' || params.get('verified') === '1')) {
+            A.setRemembered(true);
+            history.replaceState(null, '', window.location.pathname);
+            showView('verified', { focus: false });
+            return;
+        }
+
+        // 3. Already logged in → straight to the account page (or ?next)
+        if (session) {
+            window.location.replace(next);
+            return;
+        }
+
+        // 4. Normal visit
+        const initial = (window.__authHash || '').replace('#', '');
+        showView(['login', 'signup', 'forgot'].includes(initial) ? initial : 'login', { focus: false });
+
+        const reason = params.get('reason');
+        if (reason === 'login-required') UI.showBanner(pageBanner, 'info', 'Log in to see that page.');
+        if (reason === 'signed-out')     UI.showBanner(pageBanner, 'info', 'You’ve been logged out.');
+        if (reason === 'reset-done')     UI.showBanner(pageBanner, 'success', 'Password updated. Log in with your new password.');
+        if (params.get('verified') === '1' && !session) {
+            UI.showBanner(pageBanner, 'success', 'Email verified. Log in to continue.');
+        }
+    }
+
+    start().catch(err => {
+        console.error(err);
+        document.getElementById('authChecking').hidden = true;
+        document.getElementById('authContent').hidden = false;
+        showView('login', { focus: false });
+        UI.showBanner(pageBanner, 'error', A.friendlyError(err));
+    });
+})();
+</script>
+</body>
+</html>

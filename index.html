@@ -1136,6 +1136,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="menu.html">Menu</a></li>
             <li><a href="#testimonials">Reviews</a></li>
+            <li><a href="registration.html" data-account-link>Log in</a></li>
             <li><a href="menu.html" class="nav-cta">Order now</a></li>
         </ul>
         <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Open menu" aria-expanded="false">
@@ -1147,6 +1148,7 @@
     <div class="nav-mobile-overlay" id="mobileNav" role="dialog" aria-label="Mobile navigation">
         <a href="menu.html"     onclick="closeMobileMenu()">Menu</a>
         <a href="#testimonials" onclick="closeMobileMenu()">Reviews</a>
+        <a href="registration.html" data-account-link onclick="closeMobileMenu()">Log in</a>
         <a href="menu.html" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
     </div>
 
@@ -1834,6 +1836,7 @@
             }
         })();
     </script>
+    <script src="nav-account.js"></script>
 
 </body>
 </html>

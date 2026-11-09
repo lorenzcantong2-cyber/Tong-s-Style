@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My account — TONG'S STYLE</title>
+    <meta name="robots" content="noindex">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="auth.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.min.js"
+            integrity="sha384-D3HBLJnDxXL59BXo26GFWjGTcyxip2IVM0I+EqfCMwOhTc5jUTZxISDtfdXFaUOm"
+            crossorigin="anonymous"></script>
+    <script src="supabase-config.js"></script>
+    <script src="auth.js"></script>
+    <script src="auth-ui.js"></script>
+</head>
+<body>
+
+<nav class="dash-nav" aria-label="Account navigation">
+    <a href="index.html" class="auth-brand">TONG'S STYLE</a>
+    <ul class="dash-nav-links">
+        <li class="nav-hide-sm"><a href="index.html">Home</a></li>
+        <li><a href="menu.html" class="nav-order">Order now</a></li>
+        <li>
+            <button type="button" id="logoutBtn" class="btn-logout">
+                <span class="btn-label">Log out</span>
+            </button>
+        </li>
+    </ul>
+</nav>
+
+<main class="dash-main" id="main">
+    <!-- Nothing private renders until the session is verified -->
+    <div class="auth-checking" id="authChecking" role="status">
+        <span class="spinner" aria-hidden="true"></span> Loading your account…
+    </div>
+
+    <div id="dashContent" hidden>
+        <h1 class="dash-hello" id="dashHello">Hi there</h1>
+        <p class="dash-lead">This is your TONG'S STYLE account. Keep your details current so orders reach you fast.</p>
+
+        <div class="auth-banner" id="dashBanner" hidden></div>
+
+        <div class="dash-grid">
+            <section class="dash-section" aria-labelledby="details-title">
+                <h2 class="dash-section-title" id="details-title">Your details</h2>
+                <dl class="dash-details">
+                    <div><dt>Name</dt><dd id="dName">—</dd></div>
+                    <div><dt>Email</dt><dd id="dEmail">—</dd></div>
+                    <div><dt>Mobile</dt><dd id="dMobile">—</dd></div>
+                    <div><dt>Member since</dt><dd id="dSince">—</dd></div>
+                </dl>
+            </section>
+
+            <section class="dash-section" aria-labelledby="edit-title">
+                <h2 class="dash-section-title" id="edit-title">Edit profile</h2>
+                <div class="auth-banner" id="editBanner" hidden></div>
+                <form class="auth-form" id="profileForm" novalidate>
+                    <div class="field-row">
+                        <div class="field">
+                            <label for="pf-first">First name</label>
+                            <input type="text" id="pf-first" autocomplete="given-name" maxlength="50" required aria-describedby="pf-first-err">
+                            <p class="field-error" id="pf-first-err"></p>
+                        </div>
+                        <div class="field">
+                            <label for="pf-last">Last name</label>
+                            <input type="text" id="pf-last" autocomplete="family-name" maxlength="50" required aria-describedby="pf-last-err">
+                            <p class="field-error" id="pf-last-err"></p>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="pf-mobile">Mobile number</label>
+                        <input type="tel" id="pf-mobile" autocomplete="tel-national" inputmode="numeric" maxlength="11" required aria-describedby="pf-mobile-err">
+                        <p class="field-error" id="pf-mobile-err"></p>
+                    </div>
+                    <button type="submit" class="btn btn-dark" id="profileSubmit">
+                        <span class="spinner" aria-hidden="true"></span>
+                        <span class="btn-label">Save changes</span>
+                    </button>
+                </form>
+                <p class="auth-fineprint">To change your password, log out and use “Forgot password?” on the log-in page.</p>
+            </section>
+        </div>
+
+        <section class="dash-section dash-cta" aria-labelledby="cta-title">
+            <h2 class="dash-section-title" id="cta-title">Hungry?</h2>
+            <p>The full menu is one tap away — sisig, burgers, wraps and more.</p>
+            <a href="menu.html" class="btn btn-primary">See the menu</a>
+        </section>
+    </div>
+</main>
+
+<script>
+(function () {
+    'use strict';
+    const A  = window.TSAuth;
+    const UI = window.TSAuthUI;
+    if (!A || !UI) {
+        // Fail closed: never show the page without a working auth check
+        window.location.replace('registration.html?reason=login-required');
+        return;
+    }
+    const sb = A.client;
+
+    const banner     = document.getElementById('dashBanner');
+    const editBanner = document.getElementById('editBanner');
+    const logoutBtn  = document.getElementById('logoutBtn');
+
+    /* ============================================================
+       LOG OUT
+    ============================================================ */
+    logoutBtn.addEventListener('click', async () => {
+        logoutBtn.disabled = true;
+        logoutBtn.querySelector('.btn-label').textContent = 'Logging out…';
+        await A.signOut();
+        window.location.replace(A.pageUrl(A.PAGES.login, { reason: 'signed-out' }));
+    });
+
+    /* ============================================================
+       PROFILE
+    ============================================================ */
+    const pf = {
+        first:  document.getElementById('pf-first'),
+        last:   document.getElementById('pf-last'),
+        mobile: document.getElementById('pf-mobile')
+    };
+    pf.mobile.addEventListener('input', () => {
+        const d = pf.mobile.value.replace(/\D/g, '').slice(0, 11);
+        if (d !== pf.mobile.value) pf.mobile.value = d;
+    });
+    const fields = [
+        { input: pf.first,  binding: UI.bindField(pf.first,  v => A.validate.name(v, 'first name')) },
+        { input: pf.last,   binding: UI.bindField(pf.last,   v => A.validate.name(v, 'last name')) },
+        { input: pf.mobile, binding: UI.bindField(pf.mobile, A.validate.mobile) }
+    ];
+
+    function render(profile, user) {
+        const first = profile ? profile.first_name : '';
+        document.getElementById('dashHello').textContent = first ? 'Hi, ' + first : 'Hi there';
+        document.getElementById('dName').textContent   = profile ? (profile.first_name + ' ' + profile.last_name) : '—';
+        document.getElementById('dEmail').textContent  = (profile && profile.email) || user.email;
+        document.getElementById('dMobile').textContent = (profile && profile.mobile) || '—';
+        const since = new Date((profile && profile.created_at) || user.created_at);
+        document.getElementById('dSince').textContent  = since.toLocaleDateString('en-PH', { year: 'numeric', month: 'long', day: 'numeric' });
+        if (profile) {
+            pf.first.value  = profile.first_name || '';
+            pf.last.value   = profile.last_name || '';
+            pf.mobile.value = profile.mobile || '';
+        }
+    }
+
+    let currentUser = null;
+
+    document.getElementById('profileForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        UI.hideBanner(editBanner);
+        if (!UI.validateAll(fields)) return;
+        const btn = document.getElementById('profileSubmit');
+        UI.setLoading(btn, true, 'Saving…');
+
+        // RLS only lets this succeed for the logged-in user's own row
+        const { data, error } = await sb
+            .from('profiles')
+            .update({
+                first_name: pf.first.value.trim(),
+                last_name:  pf.last.value.trim(),
+                mobile:     pf.mobile.value.trim()
+            })
+            .eq('id', currentUser.id)
+            .select()
+            .single();
+
+        UI.setLoading(btn, false);
+        if (error) {
+            UI.showBanner(editBanner, 'error', A.friendlyError(error));
+            return;
+        }
+        render(data, currentUser);
+        UI.showBanner(editBanner, 'success', 'Changes saved.');
+    });
+
+    /* ============================================================
+       START — protected: redirects to log in if there's no valid session
+    ============================================================ */
+    (async function start() {
+        const user = await A.requireAuth();
+        currentUser = user;
+
+        const { data: profile, error } = await sb
+            .from('profiles')
+            .select('first_name, last_name, email, mobile, created_at')
+            .eq('id', user.id)
+            .maybeSingle();
+
+        document.getElementById('authChecking').hidden = true;
+        document.getElementById('dashContent').hidden = false;
+
+        if (error) {
+            UI.showBanner(banner, 'error', 'We couldn’t load your profile: ' + A.friendlyError(error));
+        } else if (!profile) {
+            UI.showBanner(banner, 'error', 'Your profile record is missing. Contact us and we’ll fix it.');
+            document.getElementById('profileForm').hidden = true;
+        }
+        render(profile, user);
+    })().catch(err => {
+        console.error(err);
+        document.getElementById('authChecking').textContent = A.friendlyError(err);
+    });
+})();
+</script>
+</body>
+</html>
