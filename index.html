@@ -6,7 +6,7 @@
     <title>TONG'S STYLE</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
         /* ============================================================
            TOKENS
@@ -138,7 +138,7 @@
         .hero-bg {
             position: absolute;
             inset: 0;
-            background-image: url('https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=1920&q=80');
+            background-image: url('Food/sisig.jpg');
             background-size: cover;
             background-position: center;
             transform: scale(1.06);
@@ -911,6 +911,193 @@
         .btn-hit {
             animation: btnHit 0.38s cubic-bezier(0.36, 0.07, 0.19, 0.97) !important;
         }
+
+        /* ============================================================
+           PROMO MODAL
+           Change the four brand colors here to restyle the whole popup.
+        ============================================================ */
+        :root {
+            --promo-yellow:   #F5C518;
+            --promo-cream:    #FFF3C4;
+            --promo-black:    #111111;
+            --promo-white:    #FFFFFF;
+            --promo-overlay:  rgba(0, 0, 0, 0.6);
+            --promo-check:    48px;              /* checkerboard square size x2 */
+            --font-promo:     'Bebas Neue', 'Arial Narrow', sans-serif;
+        }
+
+        .promo-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 300;                        /* above nav (100) and quiz (200), below cursor */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px 16px;
+            background: var(--promo-overlay);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+        }
+
+        .promo-overlay.open {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.25s ease, visibility 0s linear 0s;
+        }
+
+        .promo-modal {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            max-height: calc(100vh - 48px);
+            max-height: calc(100dvh - 48px);
+            display: flex;
+            border: 3px solid var(--promo-black);
+            border-radius: 6px;
+            box-shadow: 8px 8px 0 var(--promo-black);
+            background-color: var(--promo-yellow);
+            background-image: conic-gradient(
+                var(--promo-yellow) 0 25%,
+                var(--promo-cream)  0 50%,
+                var(--promo-yellow) 0 75%,
+                var(--promo-cream)  0
+            );
+            background-size: var(--promo-check) var(--promo-check);
+            transform: translateY(16px) scale(0.96);
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0.3, 1);
+        }
+
+        .promo-overlay.open .promo-modal { transform: none; }
+
+        /* Scrolls on very short screens; the close button sits outside it so it is never clipped */
+        .promo-body {
+            width: 100%;
+            overflow-y: auto;
+            padding: 48px 40px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .promo-close {
+            position: absolute;
+            top: -18px;
+            right: -18px;
+            z-index: 1;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 3px solid var(--promo-black);
+            background: var(--promo-yellow);
+            color: var(--promo-black);
+            box-shadow: 3px 3px 0 var(--promo-black);
+            transition: background 0.15s;
+        }
+
+        .promo-close:hover { background: var(--promo-cream); }
+        .promo-close svg { width: 18px; height: 18px; }
+
+        .promo-art {
+            width: auto;
+            max-width: 180px;
+            max-height: 140px;
+            margin-bottom: 16px;
+            object-fit: contain;
+        }
+
+        .promo-title {
+            font-family: var(--font-promo);
+            font-weight: 400;                    /* Bebas Neue is bold by design */
+            font-size: clamp(2.75rem, 11vw, 5rem);
+            line-height: 0.92;
+            letter-spacing: 0.01em;
+            color: var(--promo-black);
+            text-shadow: 3px 3px 0 var(--promo-white);
+            margin-bottom: 12px;
+        }
+
+        .promo-subtext {
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: clamp(0.78rem, 2.6vw, 0.9rem);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--promo-black);
+            margin-bottom: 28px;
+            max-width: 40ch;
+        }
+
+        .promo-form { width: 100%; }
+
+        .promo-input {
+            display: block;
+            width: 100%;
+            min-height: 54px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.06em;
+            text-align: center;
+            color: var(--promo-black);
+            background: var(--promo-white);
+            border: 3px solid var(--promo-black);
+            border-radius: 4px;
+        }
+
+        .promo-input::placeholder { color: #8A8A8A; opacity: 1; }
+        .promo-input:focus-visible { outline: 3px solid var(--promo-black); outline-offset: 2px; }
+
+        .promo-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .promo-btn {
+            min-height: 54px;
+            padding: 14px 16px;
+            font-family: var(--font-body);
+            font-weight: 700;
+            font-size: 0.9rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            border: 3px solid var(--promo-black);
+            border-radius: 4px;
+            transition: opacity 0.15s;
+        }
+
+        .promo-btn:hover { opacity: 0.85; }
+        .promo-btn--dark  { background: var(--promo-black); color: var(--promo-white); }
+        .promo-btn--light { background: var(--promo-white); color: var(--promo-black); }
+        .promo-btn:focus-visible,
+        .promo-close:focus-visible { outline: 3px solid var(--promo-black); outline-offset: 3px; }
+
+        .visually-hidden {
+            position: absolute !important;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
+
+        @media (max-width: 680px) {
+            .promo-modal { max-width: 92vw; }
+            .promo-body  { padding: 44px 22px 26px; }
+            .promo-close { top: -12px; right: -10px; width: 44px; height: 44px; }
+        }
+
+        @media (max-width: 480px) {
+            .promo-actions { grid-template-columns: 1fr; }
+            :root { --promo-check: 36px; }
+        }
     </style>
 </head>
 <body>
@@ -940,7 +1127,7 @@
 
     <!-- HERO -->
     <section class="hero" id="hero" aria-label="Hero">
-        <div class="hero-bg" id="heroBg" role="img" aria-label="Restaurant background"></div>
+        <div class="hero-bg" id="heroBg" role="img" aria-label="Sizzling sisig"></div>
         <div class="hero-overlay" aria-hidden="true"></div>
         <div class="hero-content">
             <h1 class="hero-title">TONG'S<br>STYLE</h1>
@@ -1130,6 +1317,32 @@
             &copy; 2024 TONG'S STYLE. All rights reserved.
         </div>
     </footer>
+
+    <!-- PROMO MODAL -->
+    <div class="promo-overlay" id="promoOverlay">
+        <div class="promo-modal" id="promoModal" role="dialog" aria-modal="true" aria-labelledby="promoTitle" aria-describedby="promoSubtext">
+            <button type="button" class="promo-close" id="promoClose" aria-label="Close">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" aria-hidden="true">
+                    <path d="M5 5l14 14M19 5L5 19"/>
+                </svg>
+            </button>
+            <div class="promo-body">
+                <!-- Replace with your own artwork -->
+                <img class="promo-art" src="images/promo-art.png" alt="" onerror="this.hidden = true">
+                <h2 class="promo-title" id="promoTitle">Members<br>Eat First</h2>
+                <p class="promo-subtext" id="promoSubtext">Got a pass? Unlock this week's member perks.</p>
+                <form class="promo-form" id="promoForm" novalidate>
+                    <label class="visually-hidden" for="promoMemberInput">Member number</label>
+                    <input type="text" class="promo-input" id="promoMemberInput"
+                           placeholder="ENTER MEMBER NUMBER" autocomplete="off" inputmode="text">
+                    <div class="promo-actions">
+                        <button type="submit" class="promo-btn promo-btn--dark">Check my pass</button>
+                        <button type="button" class="promo-btn promo-btn--light" id="promoNotMember">I'm not yet a member</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script>
         /* ============================================================
@@ -1427,6 +1640,121 @@
                 btn.classList.add('btn-hit');
                 btn.addEventListener('animationend', () => btn.classList.remove('btn-hit'), { once: true });
             });
+        })();
+
+        /* ============================================================
+           PROMO MODAL
+        ============================================================ */
+        // TODO: connect to the backend. Receives the trimmed, non-empty member number.
+        function checkPass(value) {
+            console.log('checkPass called with:', value);
+        }
+
+        (function () {
+            const SEEN_KEY  = 'promoModalSeen';
+            const OPEN_DELAY = 800;
+
+            const overlay  = document.getElementById('promoOverlay');
+            const modal    = document.getElementById('promoModal');
+            const form     = document.getElementById('promoForm');
+            const input    = document.getElementById('promoMemberInput');
+            const closeBtn = document.getElementById('promoClose');
+            const notBtn   = document.getElementById('promoNotMember');
+
+            const FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+
+            let lastFocused   = null;
+            let prevOverflow  = '';
+
+            function alreadySeen() {
+                try { return sessionStorage.getItem(SEEN_KEY) === '1'; }
+                catch (e) { return false; }
+            }
+
+            function markSeen() {
+                try { sessionStorage.setItem(SEEN_KEY, '1'); } catch (e) { /* storage blocked */ }
+            }
+
+            function isOpen() {
+                return overlay.classList.contains('open');
+            }
+
+            function openPromo() {
+                if (isOpen()) return;
+                lastFocused  = document.activeElement;
+                prevOverflow = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+                overlay.classList.add('open');
+                markSeen();
+                input.focus();
+            }
+
+            function closePromo() {
+                if (!isOpen()) return;
+                overlay.classList.remove('open');
+                document.body.style.overflow = prevOverflow;
+                if (lastFocused && lastFocused !== document.body && document.contains(lastFocused)) {
+                    lastFocused.focus();
+                } else if (document.activeElement) {
+                    document.activeElement.blur();
+                }
+            }
+
+            function trapFocus(e) {
+                const items = Array.from(modal.querySelectorAll(FOCUSABLE))
+                    .filter(el => !el.hidden && el.offsetParent !== null);
+                if (!items.length) return;
+                const first = items[0];
+                const last  = items[items.length - 1];
+
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                } else if (!modal.contains(document.activeElement)) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+
+            closeBtn.addEventListener('click', closePromo);
+            notBtn.addEventListener('click', closePromo);
+
+            // Only clicks on the dark backdrop itself close it, not clicks inside the card
+            overlay.addEventListener('click', e => {
+                if (e.target === overlay) closePromo();
+            });
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                const value = input.value.trim();
+                if (!value) {
+                    input.focus();
+                    return;
+                }
+                checkPass(value);
+            });
+
+            document.addEventListener('keydown', e => {
+                if (!isOpen()) return;
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    closePromo();
+                } else if (e.key === 'Tab') {
+                    trapFocus(e);
+                }
+            });
+
+            // Pull focus back if it escapes (e.g. a click on the backdrop edge)
+            document.addEventListener('focusin', e => {
+                if (isOpen() && !modal.contains(e.target)) input.focus();
+            });
+
+            if (!alreadySeen()) {
+                window.addEventListener('load', () => setTimeout(openPromo, OPEN_DELAY));
+            }
         })();
     </script>
 
