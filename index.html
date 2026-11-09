@@ -917,8 +917,8 @@
            Change the four brand colors here to restyle the whole popup.
         ============================================================ */
         :root {
-            --promo-red:      #E53935;
-            --promo-light:    #FFFFFF;           /* light checker square */
+            --promo-yellow:   #F5C518;
+            --promo-cream:    #FFF3C4;
             --promo-black:    #111111;
             --promo-white:    #FFFFFF;
             --promo-overlay:  rgba(0, 0, 0, 0.6);
@@ -956,12 +956,12 @@
             border: 3px solid var(--promo-black);
             border-radius: 6px;
             box-shadow: 8px 8px 0 var(--promo-black);
-            background-color: var(--promo-red);
+            background-color: var(--promo-yellow);
             background-image: conic-gradient(
-                var(--promo-red)   0 25%,
-                var(--promo-light) 0 50%,
-                var(--promo-red)   0 75%,
-                var(--promo-light) 0
+                var(--promo-yellow) 0 25%,
+                var(--promo-cream)  0 50%,
+                var(--promo-yellow) 0 75%,
+                var(--promo-cream)  0
             );
             background-size: var(--promo-check) var(--promo-check);
             transform: translateY(16px) scale(0.96);
@@ -993,13 +993,13 @@
             justify-content: center;
             border-radius: 50%;
             border: 3px solid var(--promo-black);
-            background: var(--promo-red);
-            color: var(--promo-white);
+            background: var(--promo-yellow);
+            color: var(--promo-black);
             box-shadow: 3px 3px 0 var(--promo-black);
-            transition: background 0.15s, color 0.15s;
+            transition: background 0.15s;
         }
 
-        .promo-close:hover { background: var(--promo-white); color: var(--promo-black); }
+        .promo-close:hover { background: var(--promo-cream); }
         .promo-close svg { width: 18px; height: 18px; }
 
         .promo-art {
@@ -1028,9 +1028,6 @@
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--promo-black);
-            background: var(--promo-white);      /* keeps small text readable over the checker */
-            padding: 6px 12px;
-            border-radius: 3px;
             margin-bottom: 28px;
             max-width: 40ch;
         }
