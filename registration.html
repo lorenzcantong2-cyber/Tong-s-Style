@@ -541,6 +541,7 @@
 
         const reason = params.get('reason');
         if (reason === 'login-required') UI.showBanner(pageBanner, 'info', 'Log in to see that page.');
+        if (reason === 'order-login')    UI.showBanner(pageBanner, 'info', 'Log in to place an order. New here? Create an account — it takes a minute.');
         if (reason === 'signed-out')     UI.showBanner(pageBanner, 'info', 'You’ve been logged out.');
         if (reason === 'reset-done')     UI.showBanner(pageBanner, 'success', 'Password updated. Log in with your new password.');
         if (params.get('verified') === '1' && !session) {

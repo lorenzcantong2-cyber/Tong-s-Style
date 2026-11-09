@@ -7,6 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&family=Barlow+Condensed:wght@700;800;900&display=swap" rel="stylesheet">
+    <!-- Login check for ordering (deferred: runs after the page's own script) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.0/dist/umd/supabase.min.js"
+            integrity="sha384-D3HBLJnDxXL59BXo26GFWjGTcyxip2IVM0I+EqfCMwOhTc5jUTZxISDtfdXFaUOm"
+            crossorigin="anonymous"></script>
+    <script defer src="supabase-config.js"></script>
+    <script defer src="auth.js"></script>
+    <script defer src="order-gate.js"></script>
     <style>
         /* ============================================================
            TOKENS
@@ -1122,6 +1129,69 @@
             .hero-featured-card { padding-bottom: 50px; }
             .hero-action-card { width: 140px; height: 140px; }
         }
+
+        /* ============================================================
+           ORDER GATE — only logged-in users can order
+           Fail closed: order buttons and cart stay hidden until
+           order-gate.js confirms the session with Supabase and adds
+           .can-order to <body>.
+        ============================================================ */
+        body:not(.can-order) .btn-order-row,
+        body:not(.can-order) .btn-order-featured,
+        body:not(.can-order) .cart-bar { display: none !important; }
+
+        .order-gate-note {
+            max-width: 1120px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px 28px;
+            flex-wrap: wrap;
+            padding: 18px 22px;
+            background: var(--saffron-pale);
+            border: 1.5px solid var(--saffron);
+            border-radius: 4px;
+        }
+
+        .order-gate-text { min-width: 0; flex: 1 1 320px; }
+
+        .order-gate-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1.25;
+            color: var(--black);
+        }
+
+        .order-gate-sub { font-size: 0.875rem; color: var(--muted); margin-top: 2px; }
+
+        .order-gate-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        .order-gate-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--black);
+            background: transparent;
+            border: 1.5px solid var(--black);
+            border-radius: 2px;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+        }
+
+        .order-gate-btn:hover { opacity: 0.8; }
+        .order-gate-btn--primary { background: var(--black); color: var(--white); }
+
+        @media (max-width: 540px) {
+            .order-gate-note { padding: 16px; }
+            .order-gate-actions { width: 100%; }
+            .order-gate-btn { flex: 1 1 0; }
+        }
     </style>
 </head>
 <body>
@@ -1136,7 +1206,7 @@
             <li><a href="#menu">Menu</a></li>
             <li><a href="index.html#testimonials">Reviews</a></li>
             <li><a href="registration.html" data-account-link>Log in</a></li>
-            <li><a href="#order" class="nav-cta">Order now</a></li>
+            <li><a href="#menu" class="nav-cta" data-order-link>Order now</a></li>
         </ul>
         <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Open menu" aria-expanded="false">
             <span></span><span></span><span></span>
@@ -1148,7 +1218,7 @@
         <a href="#menu"               onclick="closeMobileMenu()">Menu</a>
         <a href="index.html#testimonials" onclick="closeMobileMenu()">Reviews</a>
         <a href="registration.html" data-account-link onclick="closeMobileMenu()">Log in</a>
-        <a href="#order" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
+        <a href="#menu" class="nav-cta" data-order-link onclick="closeMobileMenu()">Order now</a>
     </div>
 
     <!-- SISIG BANNER -->
@@ -1163,7 +1233,7 @@
             <p class="sisig-banner-label">The one that started it all</p>
             <hr class="sisig-banner-rule">
             <h2 class="sisig-banner-title">No gatekeeping.<br><em>Prepped Fresh</em><br>and ready to roll.</h2>
-            <a href="#order" class="sisig-banner-cta">Order now &rarr;</a>
+            <a href="#menu" class="sisig-banner-cta" data-order-link>Order now &rarr;</a>
         </div>
 
         <!-- DELIVERY + PICK-UP CARDS GROUP -->
@@ -1182,14 +1252,14 @@
 
             <!-- Action cards -->
             <div class="hero-action-cards">
-                <a href="#order" class="hero-action-card delivery-card" aria-label="Order for delivery">
+                <a href="#menu" class="hero-action-card delivery-card" aria-label="Order for delivery" data-order-link="keep-label">
                     <img class="hero-action-card-bg" src="Food/delivery.jpg" alt="Delivery" onerror="this.style.display='none'">
                     <div class="hero-action-label">
                         <span>Delivery</span>
                         <span class="arrow">&#8594;</span>
                     </div>
                 </a>
-                <a href="#order" class="hero-action-card pickup-card" aria-label="Order for pick-up">
+                <a href="#menu" class="hero-action-card pickup-card" aria-label="Order for pick-up" data-order-link="keep-label">
                     <img class="hero-action-card-bg" src="Food/pickup.jpg" alt="Pick-Up" onerror="this.style.display='none'">
                     <div class="hero-action-label">
                         <span>Pick-Up</span>
@@ -1205,6 +1275,18 @@
          THREE-COLUMN MENU LAYOUT
     ====================================================== -->
     <div class="menu-wrap">
+        <!-- ORDER GATE: shown only to logged-out visitors -->
+        <div class="order-gate-note" id="orderGateNote" role="note" hidden>
+            <div class="order-gate-text">
+                <p class="order-gate-title">Browse freely. Log in when you’re ready to order.</p>
+                <p class="order-gate-sub">Ordering needs a free account so we know where your food is going.</p>
+            </div>
+            <div class="order-gate-actions">
+                <a href="registration.html?next=menu.html&amp;reason=order-login#login" class="order-gate-btn order-gate-btn--primary">Log in to order</a>
+                <a href="registration.html?next=menu.html#signup" class="order-gate-btn">Create account</a>
+            </div>
+        </div>
+
         <div class="menu-layout" id="menu">
 
             <!-- LEFT SIDEBAR -->
@@ -1290,7 +1372,7 @@
             </div>
             <ul class="footer-links">
                 <li><a href="#menu">Menu</a></li>
-                <li><a href="#order">Order</a></li>
+                <li><a href="#menu" data-order-link="keep-label">Order</a></li>
                 <li><a href="mailto:hello@tongsstyle.ph">Contact</a></li>
             </ul>
         </div>
@@ -1730,26 +1812,19 @@
         }
 
         /* ============================================================
-           GOOGLE SHEETS INTEGRATION
+           ORDER SUBMISSION (Supabase, logged-in users only)
+           Sent with the user's own session, so the database's RLS policy
+           ties the order to their account and rejects logged-out requests.
         ============================================================ */
-        const SUPABASE_URL  = 'https://tbxxkncornforjfraewp.supabase.co';
-        const SUPABASE_KEY  = 'sb_publishable_zPZa5_d9H8MyO7J4hX0qxg_lo_hc5YM';
-
         async function supabaseInsert(row) {
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/orders`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify(row)
-            });
-            if (!res.ok) {
-                const err = await res.text();
-                throw new Error(err);
+            if (!window.TSAuth) throw new Error('Login system not loaded');
+            const { data, error: userError } = await TSAuth.client.auth.getUser();
+            if (userError || !data.user) {
+                window.location.href = window.TSNav ? TSNav.loginUrl() : 'registration.html?next=menu.html#login';
+                throw new Error('Not logged in');
             }
+            const { error } = await TSAuth.client.from('orders').insert({ ...row, user_id: data.user.id });
+            if (error) throw error;
         }
 
         async function handleCartFormSubmit() {
@@ -1786,7 +1861,8 @@
                     btn.style.background = '';
                     btn.disabled = false;
                 }, 2800);
-            } catch {
+            } catch (err) {
+                console.error('Order failed:', err);
                 btn.textContent = 'Something went wrong — try again';
                 btn.style.background = '#8B2020';
                 setTimeout(() => { btn.textContent = 'Confirm Order →'; btn.style.background = ''; btn.disabled = false; }, 3000);

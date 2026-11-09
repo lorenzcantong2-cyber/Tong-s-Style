@@ -1137,7 +1137,7 @@
             <li><a href="menu.html">Menu</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="registration.html" data-account-link>Log in</a></li>
-            <li><a href="menu.html" class="nav-cta">Order now</a></li>
+            <li><a href="menu.html" class="nav-cta" data-order-link>Order now</a></li>
         </ul>
         <button class="nav-hamburger" id="navHamburger" onclick="toggleMobileMenu()" aria-label="Open menu" aria-expanded="false">
             <span></span><span></span><span></span>
@@ -1149,7 +1149,7 @@
         <a href="menu.html"     onclick="closeMobileMenu()">Menu</a>
         <a href="#testimonials" onclick="closeMobileMenu()">Reviews</a>
         <a href="registration.html" data-account-link onclick="closeMobileMenu()">Log in</a>
-        <a href="menu.html" class="nav-cta" onclick="closeMobileMenu()">Order now</a>
+        <a href="menu.html" class="nav-cta" data-order-link onclick="closeMobileMenu()">Order now</a>
     </div>
 
     <!-- HERO -->
@@ -1264,7 +1264,7 @@
                 <p class="result-desc" id="recDesc">Loading recommendation...</p>
                 <div class="result-price" id="recPrice">&#x20B1;180</div>
                 <div class="result-actions">
-                    <a href="menu.html#order" class="btn-order-cta" id="orderThisBtn">Order this now</a>
+                    <a href="menu.html#menu" class="btn-order-cta" id="orderThisBtn" data-order-link>Order this now</a>
                     <button class="btn-restart" onclick="restartQuiz()">Try again</button>
                 </div>
             </div>
