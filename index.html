@@ -498,6 +498,28 @@
             grid-column: span 2;
         }
 
+        /* ---- QUIZ OPTION IMAGES ---- */
+        .quiz-option-text {
+            flex: 1;
+            min-width: 0;                        /* lets long text wrap instead of pushing the image out */
+            overflow-wrap: break-word;           /* not 'anywhere': that shrinks the card's min width */
+        }
+
+        .quiz-option-img {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            margin-left: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            background: var(--surface);
+            transition: transform 0.2s ease;
+        }
+
+        .quiz-option:hover .quiz-option-img {
+            transform: scale(1.05);
+        }
+
         /* ---- RESULT ---- */
         .quiz-result {
             text-align: center;
@@ -854,10 +876,13 @@
                 align-items: flex-start;
             }
             .quiz-step { padding: 0 20px; position: relative; }
+            /* Steps are in-flow on mobile, so hide inactive ones or they squeeze the active step */
+            .quiz-step:not(.active) { display: none; }
             .quiz-question { font-size: 1.5rem; margin-bottom: 24px; }
             .quiz-options { grid-template-columns: 1fr; gap: 8px; }
             .quiz-option { padding: 14px 16px; min-height: 52px; }
             .quiz-option:last-child:nth-child(odd) { grid-column: span 1; }
+            .quiz-option-img { width: 44px; height: 44px; }
             .result-actions { flex-direction: column; }
             .btn-order-cta, .btn-restart { width: 100%; text-align: center; justify-content: center; }
 
@@ -1173,16 +1198,16 @@
                 <h2 class="quiz-question">What do you need today?</h2>
                 <div class="quiz-options">
                     <button class="quiz-option" onclick="selectOption(0, 'Sisig', this)">
-                        <span class="quiz-option-key">A</span> Sisig
+                        <span class="quiz-option-key">A</span> <span class="quiz-option-text">Sisig</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(0, 'Burger', this)">
-                        <span class="quiz-option-key">B</span> Burger
+                        <span class="quiz-option-key">B</span> <span class="quiz-option-text">Burger</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(0, 'Wapr', this)">
-                        <span class="quiz-option-key">C</span> Wapr
+                        <span class="quiz-option-key">C</span> <span class="quiz-option-text">Wapr</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(0, 'Just Because', this)">
-                        <span class="quiz-option-key">D</span> Just Because
+                        <span class="quiz-option-key">D</span> <span class="quiz-option-text">Just Because</span>
                     </button>
                 </div>
             </div>
@@ -1193,19 +1218,19 @@
                 <h2 class="quiz-question">How many people are eating?</h2>
                 <div class="quiz-options">
                     <button class="quiz-option" onclick="selectOption(1, 'Solo', this)">
-                        <span class="quiz-option-key">A</span> Solo — just me
+                        <span class="quiz-option-key">A</span> <span class="quiz-option-text">Solo — just me</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(1, 'Duo', this)">
-                        <span class="quiz-option-key">B</span> Duo — me and one more
+                        <span class="quiz-option-key">B</span> <span class="quiz-option-text">Duo — me and one more</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(1, 'Barkada', this)">
-                        <span class="quiz-option-key">C</span> Barkada — the whole squad
+                        <span class="quiz-option-key">C</span> <span class="quiz-option-text">Barkada — the whole squad</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(1, 'Family', this)">
-                        <span class="quiz-option-key">D</span> Family — everyone's coming
+                        <span class="quiz-option-key">D</span> <span class="quiz-option-text">Family — everyone's coming</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(1, 'Surprise Me', this)">
-                        <span class="quiz-option-key">E</span> Surprise Me — I don't care, just feed me
+                        <span class="quiz-option-key">E</span> <span class="quiz-option-text">Surprise Me — I don't care, just feed me</span>
                     </button>
                 </div>
             </div>
@@ -1216,16 +1241,16 @@
                 <h2 class="quiz-question">What's your budget for this order?</h2>
                 <div class="quiz-options">
                     <button class="quiz-option" onclick="selectOption(2, 'Under 50', this)">
-                        <span class="quiz-option-key">A</span> Under &#x20B1;50 — keep it tight
+                        <span class="quiz-option-key">A</span> <span class="quiz-option-text">Under &#x20B1;50 — keep it tight</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(2, '50-100', this)">
-                        <span class="quiz-option-key">B</span> &#x20B1;50–100 — the sweet spot
+                        <span class="quiz-option-key">B</span> <span class="quiz-option-text">&#x20B1;50–100 — the sweet spot</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(2, '100-200', this)">
-                        <span class="quiz-option-key">C</span> &#x20B1;100–200 — go for it
+                        <span class="quiz-option-key">C</span> <span class="quiz-option-text">&#x20B1;100–200 — go for it</span>
                     </button>
                     <button class="quiz-option" onclick="selectOption(2, '200+', this)">
-                        <span class="quiz-option-key">D</span> &#x20B1;200+ — treat everyone
+                        <span class="quiz-option-key">D</span> <span class="quiz-option-text">&#x20B1;200+ — treat everyone</span>
                     </button>
                 </div>
             </div>
@@ -1397,6 +1422,53 @@
         ============================================================ */
         let quizStep = 0;
         const quizAnswers = [null, null, null];
+
+        /* ============================================================
+           QUIZ OPTION IMAGES
+           One list per question, in the same order as the buttons.
+           Leave out `image` (or set it to '') for a card with no picture.
+           Missing/broken files are removed automatically, so no empty gap.
+        ============================================================ */
+        const quizChoiceImages = [
+            [ // Q1: What do you need today?
+                { label: 'A', text: 'Sisig',        image: 'images/answer-a.jpg' },
+                { label: 'B', text: 'Burger',       image: 'images/answer-b.jpg' },
+                { label: 'C', text: 'Wapr',         image: 'images/answer-c.jpg' },
+                { label: 'D', text: 'Just Because', image: 'images/answer-d.jpg' },
+            ],
+            [ // Q2: How many people are eating?
+                { label: 'A', text: 'Solo',        image: 'images/q2-answer-a.jpg' },
+                { label: 'B', text: 'Duo',         image: 'images/q2-answer-b.jpg' },
+                { label: 'C', text: 'Barkada',     image: 'images/q2-answer-c.jpg' },
+                { label: 'D', text: 'Family',      image: 'images/q2-answer-d.jpg' },
+                { label: 'E', text: 'Surprise Me', image: 'images/q2-answer-e.jpg' },
+            ],
+            [ // Q3: What's your budget?
+                { label: 'A', text: 'Under ₱50',  image: 'images/q3-answer-a.jpg' },
+                { label: 'B', text: '₱50–100',    image: 'images/q3-answer-b.jpg' },
+                { label: 'C', text: '₱100–200',   image: 'images/q3-answer-c.jpg' },
+                { label: 'D', text: '₱200+',      image: 'images/q3-answer-d.jpg' },
+            ],
+        ];
+
+        (function renderQuizChoiceImages() {
+            quizChoiceImages.forEach((choices, step) => {
+                const buttons = document.querySelectorAll('#step-' + step + ' .quiz-option');
+                choices.forEach((choice, i) => {
+                    const btn = buttons[i];
+                    if (!btn || !choice.image) return;
+                    const img = document.createElement('img');
+                    img.className = 'quiz-option-img';
+                    img.src       = choice.image;
+                    img.alt       = choice.text;
+                    img.loading   = 'lazy';
+                    img.width     = 56;
+                    img.height    = 56;
+                    img.addEventListener('error', () => img.remove(), { once: true });
+                    btn.appendChild(img);
+                });
+            });
+        })();
 
         const recs = {
             'Sisig': {
