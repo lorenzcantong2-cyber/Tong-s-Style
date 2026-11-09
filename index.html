@@ -1689,7 +1689,8 @@
                 document.body.style.overflow = 'hidden';
                 overlay.classList.add('open');
                 markSeen();
-                input.focus();
+                // Focus once the fade-in has finished; focusing mid-transition can be ignored by the browser
+                setTimeout(() => { if (isOpen()) input.focus(); }, 300);
             }
 
             function closePromo() {
@@ -1755,8 +1756,12 @@
                 if (isOpen() && !modal.contains(e.target)) input.focus();
             });
 
-            if (!alreadySeen()) {
-                window.addEventListener('load', () => setTimeout(openPromo, OPEN_DELAY));
+            // Start the timer right away (this script is at the end of <body>, so the markup exists).
+            // Waiting for window 'load' could stall forever on slow remote images.
+            // Add ?promo to the URL to force it open again while testing.
+            const forceOpen = new URLSearchParams(location.search).has('promo');
+            if (forceOpen || !alreadySeen()) {
+                setTimeout(openPromo, OPEN_DELAY);
             }
         })();
     </script>
